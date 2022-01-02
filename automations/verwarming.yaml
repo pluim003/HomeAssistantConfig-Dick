@@ -1,0 +1,169 @@
+# verwarming.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+# This file contains automations for the heating
+#
+# honeywell lyric fix, used when Honeywell Lyric complains about reconfiguring
+
+- id: honeywell_lyric_fix
+  alias: Honeywell Lyric Fix
+  trigger:
+  - platform: time_pattern
+    minutes: /5
+  - platform: state
+    entity_id: climate.thermostaat
+    to: unavailable
+  condition:
+  - condition: state
+    entity_id: climate.thermostaat
+    state: unavailable
+  action:
+  - service: homeassistant.update_entity
+    entity_id: climate.thermostaat
+
+# verwarming
+
+- id: verwarming_aan_ochtend_werkdag
+  alias: Verwarming aan op werkdag
+  trigger:
+  - platform: time
+    at: '07:30'
+  condition: 
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  - condition: state
+    entity_id: group.familie
+    state: home
+  action:
+    service: climate.set_temperature
+    entity_id: climate.thermostaat
+    data:
+      temperature: 19.5
+- id: verwarming_aan_ochtend_weekend
+  alias: Verwarming aan in het weekend
+  trigger:
+  - platform: time
+    at: '08:30'
+  condition:
+  - condition: time
+    weekday:
+    - sat
+    - sun
+  - condition: state
+    entity_id: group.familie
+    state: home
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: 19.5
+    target:
+      entity_id: climate.thermostaat
+
+- id: verwarming_aan_avond
+  alias: Verwarming aan in de avond
+  trigger:
+  - platform: time
+    at: '18:00'
+  condition:
+  - condition: state
+    entity_id: group.familie
+    state: home
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: 20.5
+    target:
+      entity_id: climate.thermostaat
+
+- id: verwarming_uit_avond_werkdag
+  alias: Verwarming uit op werkdag
+  trigger:
+  - platform: time
+    at: '22:00'
+  condition:
+  - condition: time
+    weekday:
+    - sun
+    - mon
+    - tue
+    - wed
+    - thu
+  action:
+    service: climate.set_temperature
+    entity_id: climate.thermostaat
+    data:
+      temperature: 19
+- id: verwarming_uit_avond_weekend
+  alias: Verwarming uit in weekend
+  trigger:
+  - platform: time
+    at: '22:30'
+  condition:
+  - condition: time
+    weekday:
+    - fri
+    - sat
+  action:
+    service: climate.set_temperature
+    entity_id: climate.thermostaat
+    data:
+      temperature: 19
+
+- id: verwarming_uit_niemand_thuis
+  alias: Verwarming uit als niemand thuis
+  trigger:
+  - platform: state
+    entity_id: group.familie
+    from: 'home'
+    to: 'not_home'
+  condition:
+  action:
+    service: climate.set_temperature
+    entity_id: climate.thermostaat
+    data:
+      temperature: 19
+      # temperature: "{{ (state_attr('sensor.thermostaat_current_temperature', 'thermostaat_current_temperature')|float - 1) }}"
+
+- id: verwarming_aan_als_iemand_thuis_overdag
+  alias: Verwarming aan als iemand thuis overdag
+  trigger:
+  - platform: state
+    entity_id: group.familie
+    from: 'not_home'
+    to: 'home'
+  condition:
+  - condition: time
+    after: '08:30:00'
+    before: '18:00:00'
+  action:
+    service: climate.set_temperature
+    entity_id: climate.thermostaat
+    data:
+      temperature: 19.5
+
+- id: verwarming_aan_als_iemand_thuis_avond
+  alias: Verwarming aan als iemand thuis avond
+  trigger:
+  - platform: state
+    entity_id: group.familie
+    from: 'not_home'
+    to: 'home'
+  condition:
+  - condition: time
+    after: '18:00:00'
+    before: '22:00:00'
+  action:
+    service: climate.set_temperature
+    entity_id: climate.thermostaat
+    data:
+      temperature: 20.5
+
