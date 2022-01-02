@@ -1,7 +1,3 @@
-#
-# some customizations
-#
-
   light.lamp_michel: #entity name
     supported_features: 191
     color_mode: true
