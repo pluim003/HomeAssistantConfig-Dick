@@ -1,7 +1,0 @@
-- platform: ezviz
-  username: !secret main_emailaddress
-  password: !secret ezviz_password
-  cameras:
-    E25011134:
-      username: admin
-      password: !secret ezviz_cam_chalet
