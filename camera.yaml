@@ -1,7 +1,16 @@
+# camera.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+# This file contains my cameras
+#
 - platform: ezviz
-  username: dick@dickpluim.com
-  password: 9rR1XuSOtMR1
+  username: !secret main_emailaddress
+  password: !secret ezviz_password
   cameras:
     E25011134:
       username: admin
-      password: LAWGSQ
+      password: !secret ezviz_cam_chalet

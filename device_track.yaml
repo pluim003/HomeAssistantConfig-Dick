@@ -1,3 +1,16 @@
+# device_track.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+# This file contains my automations
+#
+
+# device-tracking to check if people are away or at home
+# I use this method as not everyone wants to install the HomeAssistant app
+#
 - platform: ping
   interval_seconds: 30
   consider_home: 300
