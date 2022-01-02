@@ -3,7 +3,6 @@ google_calendars.yaml
 .storage
 http
 person
-onboarding
 HomeAssistantConfig-Dick
 *bak
 *cop
@@ -26,15 +25,10 @@ hacs
 home-assistant*
 homekit_controller-entity-map
 image
-lovelace
 lovelace_resources
 mobile_app
 sensor.safe
 ssl
-trace.saved_traces
 tts
 upgrade_hass.sh
 www
-zone
-
-
