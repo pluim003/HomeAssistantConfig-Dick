@@ -1,0 +1,51 @@
+  - platform: command_line                                                                                          
+    name: rpi4_cpu_temperatuur                                                                                      
+    command: "cat /sys/class/thermal/thermal_zone0/temp"                                                            
+    # If errors occur, make sure configuration file is encoded as UTF-8                                              
+
+    unit_of_measurement: "°C"                                                                                   
+    value_template: "{{ value | multiply(0.001) | round(1) }}"                                                       
+  - platform: template                                                                                               
+    sensors:                                                                                                         
+      zonsopkomst:                                                                                                   
+        friendly_name: 'Zonsopkomst'                                                                                 
+        value_template: >                                                                                            
+          {{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom(' %H:%M') | replace(" 0", "") }} 
+        icon_template: mdi:weather-sunset-up                                                                         
+      zonsondergang:                                                                                                 
+        friendly_name: 'Zonsondergang'                                                                               
+        value_template: >                                                                                            
+          {{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom(' %H:%M') | replace(" 0", "") }}
+        icon_template: mdi:weather-sunset-down                                                                       
+  - platform: systemmonitor                                                                                          
+    resources:                                                                                                       
+      - type: disk_use_percent                                                                                       
+        arg: /config                                                                                                 
+      - type: memory_free                                                                                            
+                                                                                                                     
+  - platform: afvalwijzer
+    provider: mijnafvalwijzer
+    postal_code: 9741NE
+    street_number: 4
+    suffix: 12
+    include_date_today: false
+    default_label: Geen
+    id: ''
+    exclude_list: ' ' 
+
+  - platform: template
+    sensors:
+      status_dick:
+        value_template: '{{ states.input_select.status_dick_dropdown.state }}'
+        friendly_name: 'Dick'
+      status_inge:
+        value_template: '{{ states.input_select.status_inge_dropdown.state }}'
+        friendly_name: 'Inge'
+      status_michel:
+        value_template: '{{ states.input_select.status_michel_dropdown.state }}'
+        friendly_name: 'Michel'
+      status_emilie:
+        value_template: '{{ states.input_select.status_emilie_dropdown.state }}'
+        friendly_name: 'Emilie'
+
+

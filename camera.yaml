@@ -1,0 +1,7 @@
+- platform: ezviz
+  username: dick@dickpluim.com
+  password: 9rR1XuSOtMR1
+  cameras:
+    E25011134:
+      username: admin
+      password: LAWGSQ

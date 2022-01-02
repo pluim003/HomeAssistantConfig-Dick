@@ -1,0 +1,8 @@
+ - platform: command_line
+   switches:
+     pi_hole_switch:
+       friendly_name: "Pi-hole Aan/Uit"
+       value_template: "{{ is_state('sensor.pihole', 'enabled') }}"
+         command_on: 'docker exec pihole bash pihole enable'
+         command_off: 'docker exec pihole bash pihole disable'
+

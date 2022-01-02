@@ -1,0 +1,28 @@
+
+- cal_id: 4vcb0kbh4inotenv7gpp4narfg@group.calendar.google.com
+  entities:
+  - device_id: emilie_pluim
+    ignore_availability: true
+    name: emilie pluim
+    track: true
+
+- cal_id: 72oacp4qj2visj6i9lo3a2ep2c@group.calendar.google.com
+  entities:
+  - device_id: emilie_pluim
+    ignore_availability: true
+    name: emilie pluim
+    track: true
+
+- cal_id: dick.pluim@gmail.com
+  entities:
+  - device_id: dick_pluim_gmail_com
+    ignore_availability: true
+    name: dick.pluim@gmail.com
+    track: true
+
+- cal_id: inge.dick@gmail.com
+  entities:
+  - device_id: inge_dick_gmail_com
+    ignore_availability: true
+    name: inge.dick@gmail.com
+    track: true

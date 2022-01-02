@@ -1,0 +1,9 @@
+- name: mobiele_telefoons
+  platform: group
+  services:
+    - service: mobile_app_sm_a725f
+
+- name: telefoon_dick
+  platform: group
+  services:
+    - service: mobile_app_sm_a725f

@@ -1,0 +1,56 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+#logger: !include logger.yaml
+notify: !include notify.yaml
+proximity: !include proximity.yaml
+camera: !include camera.yaml
+device_tracker: !include device_track.yaml
+input_select: !include input_select.yaml
+
+# Example configuration.yaml entry
+lyric:
+  client_id: dTTsNGlaUlPTuquOAkWX7L0Mp3Fe3ryA
+  client_secret: UKNlJV9nHX4TEgph
+
+spotify:
+  client_id: 47071259550b46869e9245bd1ab82baa
+  client_secret: 59a68555b30e46ac8809a8702d58799b
+
+homeassistant:
+ customize: !include customize.yaml
+
+#sensor.ipad_van_dick_gb:
+#  value_template: "{{ ((128 * states('sensor.ipad_van_dick_storage_proc')) / 100 ) }}"
+
+# ipadstorage in GB
+# ipad-storage in gb
+
+sensor: !include sensor.yaml
+binary_sensor: !include binary_sensor.yaml
+# resources: !include resources.yaml
+
+
+# switch: !include switches.yaml
+# service: !include services.yaml
+
+google:
+  client_id: 580343774541-3mtq3ocnc18grf16uoe4aui7lfnsu3cr.apps.googleusercontent.com
+  client_secret: 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
+
+#http:
+#  ssl_certificate: /config/ssl/myhass.crt
+#  ssl_key: /config/ssl/myhass.key
+#   ssl_certficate: /config/ssl/dickpluim.pem
+#   ssl_key: /config/ssl/dickpluim-key.pem
+
+localtuya: !include localtuya.yaml
+

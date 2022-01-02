@@ -1,0 +1,8 @@
+- platform: ping
+  interval_seconds: 30
+  consider_home: 300
+  hosts:
+    telefoon_dick: 10.0.0.105
+    telefoon_emilie: 10.0.0.123
+    telefoon_inge: 10.0.0.130
+    telefoon_michel: 10.0.0.129

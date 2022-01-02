@@ -1,0 +1,10 @@
+  - platform: workday
+    country: NL
+    workdays: [mon, tue, wed, thu, fri]
+    excludes: [sat, sun, holiday]
+
+#  - platform: workday1
+#    country: NL
+    #workdays: [sun, mon, tue, wed, thu]
+#    excludes: [fri, sat]
+
