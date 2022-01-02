@@ -12,7 +12,3 @@ familie:
     - device_tracker.telefoon_emilie
     - device_tracker.telefoon_inge
     - device_tracker.telefoon_michel
-vrienden:
-  name: Vrienden
-  entities:
-    - device_tracker.michelles_ipad
