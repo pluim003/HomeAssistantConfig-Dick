@@ -11,11 +11,3 @@ dick_thuis:
     - device_tracker.sm_a725f
   tolerance: 5
   unit_of_measurement: km
-
-michelle_bij_ons:
-  zone: home
-  devices:
-    - device_tracker.michelles_ipad
-  tolerance: 5
-  unit_of_measurement: km
-
