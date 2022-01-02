@@ -1,2 +1,10 @@
 secrets.yaml
 google_calendars.yaml
+.storage
+http
+person
+onboarding
+*bak
+*cop
+*goed
+*new
