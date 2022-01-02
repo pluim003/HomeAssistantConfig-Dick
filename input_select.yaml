@@ -1,3 +1,11 @@
+# input_select.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+
 status_dick_dropdown:
   name: Dick
   options:

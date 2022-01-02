@@ -1,3 +1,10 @@
+# known_devices.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
 
 telefoon_dick:
   hide_if_away: false
