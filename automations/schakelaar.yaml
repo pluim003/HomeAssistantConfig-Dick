@@ -1,0 +1,36 @@
+# schakelaar.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+# This file contains automations for switches
+#
+
+# schakelaar uit als niemand thuis en weer aan als iemand thuis komt
+
+- id: Schakelaar_AV-apparatuur_uit_als_niemand_thuis
+  alias: Schakelaar AV-apparatuur uit als niemand thuis
+  trigger:
+  - platform: state
+    entity_id: group.familie
+    from: 'home'
+    to: 'not_home'
+  condition:
+  action:
+    service: switch.turn_off
+    entity_id: switch.schakelaar_av_apparatuur
+
+- id: Schakelaar_AV-apparatuur_aan_als_iemand_thuis
+  alias: Schakelaar AV-apparatuur aan als iemand thuis
+  trigger:
+  - platform: state
+    entity_id: group.familie
+    from: 'not_home'
+    to: 'home'
+  condition:
+  action:
+    service: switch.turn_on
+    entity_id: switch.schakelaar_av_apparatuur
+

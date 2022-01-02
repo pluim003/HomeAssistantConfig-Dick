@@ -7,7 +7,7 @@
 #
 # This file contains the binary sensors
 #
- - platform: workday
+  - platform: workday
     country: NL
     workdays: [mon, tue, wed, thu, fri]
     excludes: [sat, sun, holiday]
