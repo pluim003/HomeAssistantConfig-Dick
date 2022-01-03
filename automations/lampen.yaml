@@ -26,6 +26,9 @@
     - condition: state
       entity_id: light.lamp_michel
       state: "on"
+    - condition: numeric_state
+      entity_id: sensor.buienradar_irradiance
+      below: 10
   action:
     service: light.turn_off
     entity_id: light.lamp_michel
