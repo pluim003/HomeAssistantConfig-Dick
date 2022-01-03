@@ -1,11 +1,13 @@
 # aanwezigheid.yaml
-# v2022.01.02
+# v2022.01.03
 #
 # History:
 #
 # v2022.01.02 - Initial version
+# v2022.01.03 - Added comment
 #
 # This file contains automations with respect to presence of family-members
+# This is derived from the automation by Phil Hawthorne: https://philhawthorne.com/making-home-assistants-presence-detection-not-so-binary/
 #
 
 # check aan/afwezigheid
