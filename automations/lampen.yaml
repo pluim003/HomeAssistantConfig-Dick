@@ -8,7 +8,7 @@
 # This file contains automations for lights
 #
 
-# lamp uit op in 'homeoffice' op werkdagen als zon op komt
+# lamp uit in 'homeoffice' op werkdagen als zon op komt
 
 - id: lamp_michel_uit_na_zonsopkomst
   alias: Lamp Michel uit na zonsopkomst
