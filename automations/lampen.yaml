@@ -16,19 +16,16 @@
   - platform: sun
     event: sunrise
   condition:
-    alias: "Zonsopkomst of Lamp Michel is aan"
-    condition: and
-    conditions:
-      - condition: time
-        weekday:
-        - mon
-        - tue
-        - wed
-        - thu
-        - fri    
-      - condition: state
-        entity: light.lamp_michel
-        state: on
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri    
+    - condition: state
+      entity: light.lamp_michel
+      state: on
   action:
     service: light.turn_off
     entity_id: light.lamp_michel
