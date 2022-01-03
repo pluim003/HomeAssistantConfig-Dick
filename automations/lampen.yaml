@@ -6,6 +6,7 @@
 # v2022.01.03 - Initial version
 #               Added light on when irradiance is low and off when it gets higher
 #               Light won't go out at sunrise then irradiance is too low
+#               Modified again as it would only work between sunrise and sunset
 #
 # This file contains automations for lights
 #
@@ -52,17 +53,9 @@
       - wed
       - thu
       - fri
-    - condition: sun
-      after: sunrise
-    - condition: sun
-      before: sunset
     - condition: state
       entity_id: light.lamp_michel
       state: "on"
-    - condition: numeric_state
-      entity_id: sensor.buienradar_irradiance
-      value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
-      above: 10
   action:
     service: light.turn_off
     entity_id: light.lamp_michel    
@@ -82,17 +75,11 @@
       - wed
       - thu
       - fri
-    - condition: sun
-      after: sunrise
-    - condition: sun
-      before: sunset
     - condition: state
       entity_id: light.lamp_michel
       state: "off"
-    - condition: numeric_state
-      entity_id: sensor.buienradar_irradiance
-      value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
-      below: 10
+    - condition: time
+      before "17:00:00"
   action:
     service: light.turn_on
     entity_id: light.lamp_michel    

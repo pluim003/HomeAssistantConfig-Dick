@@ -32,3 +32,4 @@ ssl
 tts
 upgrade_hass.sh
 www
+*.swp
