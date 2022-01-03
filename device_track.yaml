@@ -1,13 +1,13 @@
 # device_track.yaml
-# v2022.01.02
+# v2022.01.03
 #
 # History:
 #
 # v2022.01.02 - Initial version
+# v2022.01.03 - Moved ip-addresses to secrets.yaml
 #
-# This file contains my automations
+# This file contains the information for the devices to track
 #
-
 # device-tracking to check if people are away or at home
 # I use this method as not everyone wants to install the HomeAssistant app
 #
@@ -15,7 +15,7 @@
   interval_seconds: 30
   consider_home: 300
   hosts:
-    telefoon_dick: 10.0.0.105
-    telefoon_emilie: 10.0.0.123
-    telefoon_inge: 10.0.0.130
-    telefoon_michel: 10.0.0.129
+    telefoon_dick: !secret ip_dick
+    telefoon_emilie: !secret ip_emilie
+    telefoon_inge: !secret ip_inge
+    telefoon_michel: !secret ip_michel
