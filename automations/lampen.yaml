@@ -79,7 +79,7 @@
       entity_id: light.lamp_michel
       state: "off"
     - condition: time
-      before "17:00:00"
+      before: "17:00:00"
   action:
     service: light.turn_on
     entity_id: light.lamp_michel    
