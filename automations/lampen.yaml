@@ -39,7 +39,7 @@
   trigger:
   - platform: numeric_state
     entity_id: sensor.buienradar_irradiance
-    value_template: "{{ states.sensor.buienradar_irradiance.state | split(" ")[0] }}"    
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
     above: 10
   condition:
     - condition: time
@@ -68,7 +68,7 @@
   trigger:
   - platform: numeric_state
     entity_id: sensor.buienradar_irradiance
-    value_template: "{{ states.sensor.buienradar_irradiance.state | split(" ")[0] }}"    
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
     below: 10
   condition:
     - condition: time
