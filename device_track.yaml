@@ -6,9 +6,8 @@
 # v2022.01.02 - Initial version
 # v2022.01.03 - Moved ip-addresses to secrets.yaml
 #
-# This file contains my automations
+# This file contains the information for the devices to track
 #
-
 # device-tracking to check if people are away or at home
 # I use this method as not everyone wants to install the HomeAssistant app
 #
