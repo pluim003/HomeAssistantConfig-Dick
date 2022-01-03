@@ -54,7 +54,6 @@
       - fri
     - condition: sun
       after: sunrise
-      offset: -00:30:00
     - condition: sun
       before: sunset
     - condition: state
@@ -85,7 +84,6 @@
       - fri
     - condition: sun
       after: sunrise
-      offset: -00:30:00
     - condition: sun
       before: sunset
     - condition: state
