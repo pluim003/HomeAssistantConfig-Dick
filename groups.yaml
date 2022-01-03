@@ -1,0 +1,14 @@
+# groups.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+familie:
+  name: Familie
+  entities:
+    - device_tracker.telefoon_dick
+    - device_tracker.telefoon_emilie
+    - device_tracker.telefoon_inge
+    - device_tracker.telefoon_michel

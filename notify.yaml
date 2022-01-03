@@ -1,0 +1,16 @@
+# notify.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+- name: mobiele_telefoons
+  platform: group
+  services:
+    - service: mobile_app_sm_a725f
+
+- name: telefoon_dick
+  platform: group
+  services:
+    - service: mobile_app_sm_a725f

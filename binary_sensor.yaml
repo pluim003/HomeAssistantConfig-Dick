@@ -1,0 +1,13 @@
+# binary_sensor.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+# This file contains the binary sensors
+#
+  - platform: workday
+    country: NL
+    workdays: [mon, tue, wed, thu, fri]
+    excludes: [sat, sun, holiday]

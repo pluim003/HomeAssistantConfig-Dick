@@ -1,0 +1,62 @@
+# configuration.yaml
+# v2022.01.03
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#               split up automations in separate directory
+# v2022.01.03 - Removed some hard-coded API-keys and moved them to secrets.yaml
+#               Changed layout
+#
+# Configure a default setup of Home Assistant (frontend, api, etc)
+#
+
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include_dir_merge_list automations
+script: !include scripts.yaml
+scene: !include scenes.yaml
+#logger: !include logger.yaml
+notify: !include notify.yaml
+proximity: !include proximity.yaml
+camera: !include camera.yaml
+device_tracker: !include device_track.yaml
+input_select: !include input_select.yaml
+sensor: !include sensor.yaml
+binary_sensor: !include binary_sensor.yaml
+# resources: !include resources.yaml
+# switch: !include switches.yaml
+# service: !include services.yaml
+
+homeassistant:
+ customize: !include customize.yaml
+
+# API's
+
+lyric:
+  client_id: !secret lyric_client_id
+  client_secret: !secret lyric_client_secret
+
+spotify:
+  client_id: !secret spotify_client_id
+  client_secret: !secret spotify_client_secret
+
+google:
+  client_id: !secret google_client_id
+  client_secret: !secret google_client_secret
+
+# custom_compoents
+
+localtuya: !include localtuya.yaml
+
+#http:
+#  ssl_certificate: /config/ssl/myhass.crt
+#  ssl_key: /config/ssl/myhass.key
+#   ssl_certficate: /config/ssl/dickpluim.pem
+#   ssl_key: /config/ssl/dickpluim-key.pem
+

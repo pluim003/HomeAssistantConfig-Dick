@@ -1,0 +1,28 @@
+# customize.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+#
+# some customizations
+#
+
+  light.lamp_michel: #entity name
+    supported_features: 191
+    color_mode: true
+    brightness: true
+#     supported_color_modes: rgb
+  sensor.afvalwijzer_gft:
+    friendly_name: GFT
+    entity_picture: /local/afvalwijzer/gft.png
+  sensor.afvalwijzer_restafval:
+    friendly_name: Restafval
+    entity_picture: /local/afvalwijzer/restafval.png
+  sensor.afvalwijzer_papier:
+    friendly_name: Oud papier
+    entity_picture: /local/afvalwijzer/papier.png
+  sensor.status_dick:
+    entity_picture: /local/personen/dick.jpg
+

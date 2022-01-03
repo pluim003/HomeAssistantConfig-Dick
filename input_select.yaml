@@ -1,0 +1,44 @@
+# input_select.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+
+status_dick_dropdown:
+  name: Dick
+  options:
+    - Thuis
+    - Net thuis
+    - Net weg
+    - Afwezig
+    - Langdurig afwezig
+
+status_inge_dropdown:
+  name: Inge
+  options:
+    - Thuis
+    - Net thuis
+    - Net weg
+    - Afwezig
+    - Langdurig afwezig
+
+status_michel_dropdown:
+  name: Michel
+  options:
+    - Thuis
+    - Net thuis
+    - Net weg
+    - Afwezig
+    - Langdurig afwezig
+
+status_emilie_dropdown:
+  name: Emilie
+  options:
+    - Thuis
+    - Net thuis
+    - Net weg
+    - Afwezig
+    - Langdurig afwezig
+

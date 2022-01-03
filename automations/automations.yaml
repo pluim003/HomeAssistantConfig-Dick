@@ -1,0 +1,211 @@
+# automations.yaml
+# v2022.01.03
+#
+# History:
+#
+# v2022.01.02 - Initial version
+# v2022.01.03 - Removed Honeywell Lyric-fix as it was already in verwarming.yaml
+#
+# This file contains my automations
+#
+
+# kerstboom/kerstverlichting
+
+- id: kerstboom_aan_op_werkdagen
+  alias: Kerstboom aan op werkdagen
+  trigger:
+  - platform: time
+    at: 06:45:00
+  condition:
+    condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  action:
+    service: switch.turn_on
+    entity_id: switch.kerstboom
+- id: kerstboom_aan_in_weekend
+  alias: Kerstboom aan in weekend
+  trigger:
+  - platform: time
+    at: 08:00:00
+  condition:
+    condition: time
+    weekday:
+    - sat
+    - sun
+  action:
+    service: switch.turn_on
+    entity_id: switch.kerstboom
+- id: kerstboom_uit_op_zondag_tm_donderdag
+  alias: Kerstboom uit op zondag t/m donderdag
+  trigger:
+  - platform: time
+    at: '23:00:00'
+  condition:
+    condition: time
+    weekday:
+    - sun
+    - mon
+    - tue
+    - wed
+    - thu
+  action:
+    service: switch.turn_off
+    entity_id: switch.kerstboom
+- id: kerstboom_uit_op_vrijdag_en_zaterdag
+  alias: Kerstboom uit op vrijdag en zaterdag
+  trigger:
+  - platform: time
+    at: '23:30:00'
+  condition:
+    condition: time
+    weekday:
+    - fri
+    - sat
+  action:
+    service: switch.turn_off
+    entity_id: switch.kerstboom
+- id: kerstverlichting_aan
+  alias: Kerstverlichting aan
+  trigger:
+  - platform: time
+    at: 06:45:00
+  action:
+    service: switch.turn_on
+    entity_id: switch.kerstverlichting
+- id: kerstverlichting_aan_bij_zonsondergang
+  alias: Kerstverlichting aan bij zonsondergang
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: +00:30:00
+  action:
+    service: switch.turn_on
+    entity_id: switch.kerstverlichting
+- id: kerstverlichting_uit
+  alias: Kerstverlichting uit
+  trigger:
+  - platform: time
+    at: '23:00:00'
+  action:
+    service: switch.turn_off
+    entity_id: switch.kerstverlichting
+- id: kerstverlichting_uit_na_zonsopkomst
+  alias: Kerstverlichting uit na zonsopkomst
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: -00:30:00
+  action:
+    service: switch.turn_off
+    entity_id: switch.kerstverlichting
+
+# afvalwijzer
+
+- id: afval_meldingen
+  alias: "Afval meldingen"
+  mode: single
+  max_exceeded: silent
+  trigger:
+    - platform: time
+      at:
+        - "07:00:00"
+      id: "Vandaag_today"
+    - platform: time
+      at:
+        - "17:00:00"
+      id: "Morgen1_tomorrow"
+    - platform: time
+      at:
+        - "20:00:00"
+      id: "Morgen2_tomorrow"
+  variables:
+    sensor: "sensor.afvalwijzer_{{ trigger.id.split('_')[1] }}"
+  condition:
+    - alias: "Notification needed?"
+      condition: template
+      value_template: "{{ states(sensor) != 'Geen' }}"
+  action:
+    - alias: "Notification phones"
+      service: notify.telefoon_dick
+      data:
+        title: "Denk aan de {{ states(sensor) }} container"
+        message: "{{ trigger.id.split('_')[0] }} moet {{ states(sensor) }} naar buiten"
+        data:
+          channel: Trash
+          ttl: 0
+          priority: high
+          actions:
+            - action: MARK_TRASH_MOVED
+              title: Afval verwerkt
+              icon: sfsymbols:trash.circle
+
+- id: afval_herstel_notificatie
+  alias: Afval - Herstel notificatie
+  trigger:
+    platform: state
+    entity_id: input_boolean.waste_moved
+    to: "on"
+    for:
+      hours: 12
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.waste_moved
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.waste_reminder
+
+- id: afval_bevestig_notificatie
+  alias: Afval - Bevestig notificatie
+  trigger:
+    - platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: "MARK_WASTE_MOVED"
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.waste_moved
+    - service: notify.family
+      data:
+        title: 'Afval'
+        message: 'Afvaltype(n): {{ states.sensor.afvalwijzer_tomorrow_formatted.state }} zijn aan de straat gezet.'
+        data:
+          push:
+            badge: 0        
+
+- id: '300m_van_huis'
+  alias: Iemand is 300m van huis en op weg naar huis
+  mode: single
+  trigger:
+  - platform: numeric_state
+    entity_id:
+      - proximity.dick_thuis
+    below: 300
+  condition:
+  - condition: and
+    conditions:
+    - condition: template
+      value_template: '{{ trigger.to_state.attributes.dir_of_travel  == "towards" }}'
+  action:
+  - service: notify.telefoon_dick
+    data_template:
+      message: "{{trigger.to_state.object_id[:-5] | capitalize}} is 300m van huis!"
+
+# notify
+
+- alias: Stuur bericht
+  id: stuur_bericht
+  trigger:
+  - entity_id: device_tracker.telefoon_dick
+    from: 'home'
+    platform: state
+    to: 'not_home'
+  action:
+
+  - data:
+      entity_id: media_player.slaapkamer_i_en_d
+      message: Het lijkt erop dat Dick afwezig is!
+    service: tts.google_translate_say

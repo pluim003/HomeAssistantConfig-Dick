@@ -1,0 +1,40 @@
+# known_devices.yaml
+# v2022.01.02
+#
+# History:
+#
+# v2022.01.02 - Initial version
+#
+
+telefoon_dick:
+  hide_if_away: false
+  mac:
+  name: Dick
+  picture: /local/personen/dick.jpg
+  icon:
+  picture:
+  track: true
+
+telefoon_emilie:
+  hide_if_away: false
+  mac:
+  name: Emilie
+  icon:
+  picture:
+  track: true
+
+telefoon_michel:
+  hide_if_away: false
+  mac:
+  name: Michel
+  icon:
+  picture:
+  track: true
+
+telefoon_inge:
+  name: Inge
+  hide_if_away: false
+  mac:
+  icon:
+  picture:
+  track: true

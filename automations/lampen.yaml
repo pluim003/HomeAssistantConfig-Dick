@@ -1,0 +1,98 @@
+# lampen.yaml
+# v2022.01.03
+#
+# History:
+#
+# v2022.01.03 - Initial version
+#               Added light on when irradiance is low and off when it gets higher
+#               Light won't go out at sunrise then irradiance is too low
+#
+# This file contains automations for lights
+#
+
+# lamp uit in 'homeoffice' op werkdagen als zon op komt
+
+- id: lamp_michel_uit_na_zonsopkomst
+  alias: Lamp Michel uit na zonsopkomst
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: -00:30:00
+  condition:
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri    
+    - condition: state
+      entity_id: light.lamp_michel
+      state: "on"
+    - condition: numeric_state
+      entity_id: sensor.buienradar_irradiance
+      value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
+      above: 10
+  action:
+    service: light.turn_off
+    entity_id: light.lamp_michel
+    
+- id: lamp_michel_uit_als_buiten_licht_genoeg
+  alias: Lamp Michel uit als buiten licht genoeg
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.buienradar_irradiance
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
+    above: 10
+  condition:
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+    - condition: sun
+      after: sunrise
+    - condition: sun
+      before: sunset
+    - condition: state
+      entity_id: light.lamp_michel
+      state: "on"
+    - condition: numeric_state
+      entity_id: sensor.buienradar_irradiance
+      value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
+      above: 10
+  action:
+    service: light.turn_off
+    entity_id: light.lamp_michel    
+
+- id: lamp_michel_aan_als_buiten_te_donker
+  alias: Lamp Michel aan als buiten te donker
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.buienradar_irradiance
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
+    below: 10
+  condition:
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+    - condition: sun
+      after: sunrise
+    - condition: sun
+      before: sunset
+    - condition: state
+      entity_id: light.lamp_michel
+      state: "off"
+    - condition: numeric_state
+      entity_id: sensor.buienradar_irradiance
+      value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
+      below: 10
+  action:
+    service: light.turn_on
+    entity_id: light.lamp_michel    
