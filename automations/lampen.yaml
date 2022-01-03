@@ -39,7 +39,11 @@
   trigger:
   - platform: numeric_state
     entity_id: sensor.buienradar_irradiance
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
     above: 10
+    variables:
+    sensor: "sensor.buienradar_irridance{{ trigger.id.split('_')[1] }}"
+
   condition:
     - condition: time
       weekday:
@@ -67,6 +71,7 @@
   trigger:
   - platform: numeric_state
     entity_id: sensor.buienradar_irradiance
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
     below: 10
   condition:
     - condition: time
