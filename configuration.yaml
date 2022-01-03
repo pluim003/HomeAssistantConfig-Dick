@@ -7,6 +7,7 @@
 #               split up automations in separate directory
 # v2022.01.03 - Removed some hard-coded API-keys and moved them to secrets.yaml
 #               Changed layout
+#               Added O365-integration
 #
 # Configure a default setup of Home Assistant (frontend, api, etc)
 #
@@ -50,7 +51,23 @@ google:
   client_id: !secret google_client_id
   client_secret: !secret google_client_secret
 
-# custom_compoents
+o365:
+  client_id: !secret o365_client_id
+  client_secret: !secret o365_client_secret
+  email_sensor:
+    - name: inbox
+      max_items: 2
+      is_unread: True
+  query_sensors:
+    - name: "HA Notifications"
+      folder: "Inbox/Test_Inbox"
+      from: "mail@example.com"
+      subject_contains: "Notifcation from home assistant"
+      has_attachment: True
+      max_items: 2
+      is_unread: True
+
+# custom_components
 
 localtuya: !include localtuya.yaml
 
