@@ -5,6 +5,7 @@
 #
 # v2022.01.03 - Initial version
 #               Added light on when irradiance is low and off when it gets higher
+#               Light won't go out at sunrise then irradiance is too low
 #
 # This file contains automations for lights
 #
@@ -16,6 +17,7 @@
   trigger:
   - platform: sun
     event: sunrise
+    offset: -00:30:00
   condition:
     - condition: time
       weekday:
@@ -29,7 +31,8 @@
       state: "on"
     - condition: numeric_state
       entity_id: sensor.buienradar_irradiance
-      below: 10
+      value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
+      above: 10
   action:
     service: light.turn_off
     entity_id: light.lamp_michel
@@ -39,7 +42,7 @@
   trigger:
   - platform: numeric_state
     entity_id: sensor.buienradar_irradiance
-    value_template: "{{ states.sensor.buienradar_irradiance.state | split(" ")[0] }}"    
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
     above: 10
   condition:
     - condition: time
@@ -58,6 +61,7 @@
       state: "on"
     - condition: numeric_state
       entity_id: sensor.buienradar_irradiance
+      value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
       above: 10
   action:
     service: light.turn_off
@@ -68,7 +72,7 @@
   trigger:
   - platform: numeric_state
     entity_id: sensor.buienradar_irradiance
-    value_template: "{{ states.sensor.buienradar_irradiance.state | split(" ")[0] }}"    
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
     below: 10
   condition:
     - condition: time
@@ -87,6 +91,7 @@
       state: "off"
     - condition: numeric_state
       entity_id: sensor.buienradar_irradiance
+      value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
       below: 10
   action:
     service: light.turn_on

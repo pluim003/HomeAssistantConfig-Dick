@@ -1,29 +1,13 @@
 # automations.yaml
-# v2022.01.02
+# v2022.01.03
 #
 # History:
 #
 # v2022.01.02 - Initial version
+# v2022.01.03 - Removed Honeywell Lyric-fix as it was already in verwarming.yaml
 #
 # This file contains my automations
 #
-# honeywell lyric fix, used when Honeywell Lyric complains about reconfiguring
-
-- id: honeywell_lyric_fix
-  alias: Honeywell Lyric Fix
-  trigger:
-  - platform: time_pattern
-    minutes: /5
-  - platform: state
-    entity_id: climate.thermostaat
-    to: unavailable
-  condition:
-  - condition: state
-    entity_id: climate.thermostaat
-    state: unavailable
-  action:
-  - service: homeassistant.update_entity
-    entity_id: climate.thermostaat
 
 # kerstboom/kerstverlichting
 
