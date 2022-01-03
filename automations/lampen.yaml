@@ -1,1 +1,32 @@
+# lampen.yaml
+# v2022.01.03
+#
+# History:
+#
+# v2022.01.03 - Initial version
+#
+# This file contains automations for lights
+#
 
+# lamp uit op in 'homeoffice' op werkdagen als zon op komt
+
+- id: lamp_michel_uit_na_zonsopkomst
+  alias: Lamp Michel uit na zonsopkomst
+  trigger:
+  - platform: sun
+    event: sunrise
+  condition: and
+  conditions:
+    condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri    
+    condition: state
+    entity: light.lamp_michel
+    state: on
+  action:
+    service: light.turn_off
+    entity_id: light.lamp_michel
