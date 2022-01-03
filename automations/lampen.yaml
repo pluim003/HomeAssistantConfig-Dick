@@ -17,14 +17,14 @@
     event: sunrise
   condition: and
   conditions:
-    condition: time
+  - condition: time
     weekday:
     - mon
     - tue
     - wed
     - thu
     - fri    
-    condition: state
+  - condition: state
     entity: light.lamp_michel
     state: on
   action:
