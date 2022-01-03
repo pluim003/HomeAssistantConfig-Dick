@@ -54,6 +54,7 @@ google:
 o365:
   client_id: !secret o365_client_id
   client_secret: !secret o365_client_secret
+  alt_auth_flow: true
   email_sensor:
     - name: inbox
       max_items: 2
