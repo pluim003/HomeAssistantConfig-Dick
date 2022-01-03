@@ -1,9 +1,10 @@
 # sensors.yaml
-# v2022.01.02
+# v2022.01.03
 #
 # History:
 #
 # v2022.01.02 - Initial version
+# v2022.01.03 - Moved sensitive data to secrets.yaml
 #
 
   - platform: command_line                                                                                          
