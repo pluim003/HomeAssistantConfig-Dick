@@ -7,35 +7,35 @@
 #               Added light on when irradiance is low and off when it gets higher
 #               Light won't go out at sunrise then irradiance is too low
 #               Modified again as it would only work between sunrise and sunset
+#               Removed light off at sunrise and replaced that with light on at
+#               specific time unless it's too bright outside
 #
 # This file contains automations for lights
 #
 
 # lamp uit in 'homeoffice' op werkdagen als zon op komt
 
-- id: lamp_michel_uit_na_zonsopkomst
-  alias: Lamp Michel uit na zonsopkomst
+- id: lamp_michel_aan_voor_werk
+  alias: Lamp Michel aan voor werk
   trigger:
-  - platform: sun
-    event: sunrise
-    offset: -00:30:00
+  - platform: time
+    at: "07:10:00"
+  - platform: numeric_state
+    entity_id: sensor.buienradar_irradiance
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
+    below: 10
   condition:
     - condition: time
       weekday:
       - mon
       - tue
-      - wed
       - thu
       - fri    
     - condition: state
       entity_id: light.lamp_michel
-      state: "on"
-    - condition: numeric_state
-      entity_id: sensor.buienradar_irradiance
-      value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
-      above: 10
+      state: "off"
   action:
-    service: light.turn_off
+    service: light.turn_on
     entity_id: light.lamp_michel
     
 - id: lamp_michel_uit_als_buiten_licht_genoeg
