@@ -25,7 +25,7 @@
       - fri    
     - condition: state
       entity_id: light.lamp_michel
-      state: on
+      state: "on"
   action:
     service: light.turn_off
     entity_id: light.lamp_michel
