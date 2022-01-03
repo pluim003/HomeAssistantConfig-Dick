@@ -33,9 +33,9 @@
                                                                                                                      
   - platform: afvalwijzer
     provider: mijnafvalwijzer
-    postal_code: 9741NE
-    street_number: 4
-    suffix: 12
+    postal_code: !secret adres_postcode
+    street_number: !secret adres_huisnummer
+    suffix: !secret adres_toevoeging
     include_date_today: false
     default_label: Geen
     id: ''
