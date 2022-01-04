@@ -1,5 +1,5 @@
 # configuration.yaml
-# v2022.01.04
+# v2022.01.05
 #
 # History:
 #
@@ -9,6 +9,7 @@
 #               Changed layout
 #               Added O365-integration
 # v2022.01.04 - Tried to get ssl working without success yet
+# v2002.01.05 - Finally ssl working
 #
 # Configure a default setup of Home Assistant (frontend, api, etc)
 #
@@ -36,7 +37,7 @@ binary_sensor: !include binary_sensor.yaml
 # service: !include services.yaml
 
 homeassistant:
-#  internal_url: !secret http_internal_url
+  internal_url: !secret http_internal_url
   external_url: !secret http_external_url
   allowlist_external_urls:
     - !secret http_allowlist_ext_url1
@@ -78,4 +79,4 @@ o365:
 
 localtuya: !include localtuya.yaml
 
-#http: !include http.yaml
+http: !include http.yaml

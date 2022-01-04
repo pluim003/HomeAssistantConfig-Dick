@@ -1,0 +1,23 @@
+# sensors.yaml
+# v2022.01.05
+#
+# History:
+#
+# v2022.01.05 - Initial version
+
+  use_x_forwarded_for: true
+  server_port: 8123
+  ssl_certificate: !secret http_ssl_certificate
+  ssl_key: !secret http_ssl_key
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
+  trusted_proxies:
+    - !secret http_trusted_proxies_1
+    - !secret http_trusted_proxies_2
+    - !secret http_trusted_proxies_3
+    - !secret http_trusted_proxies_4
+    - !secret http_trusted_proxies_5
+    - !secret http_trusted_proxies_6
+    - !secret http_trusted_proxies_7
+
+
