@@ -1,5 +1,5 @@
 # configuration.yaml
-# v2022.01.03
+# v2022.01.04
 #
 # History:
 #
@@ -8,6 +8,7 @@
 # v2022.01.03 - Removed some hard-coded API-keys and moved them to secrets.yaml
 #               Changed layout
 #               Added O365-integration
+# v2022.01.04 - Tried to get ssl working without success yet
 #
 # Configure a default setup of Home Assistant (frontend, api, etc)
 #
