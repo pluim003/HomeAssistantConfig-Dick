@@ -35,7 +35,12 @@ binary_sensor: !include binary_sensor.yaml
 # service: !include services.yaml
 
 homeassistant:
- customize: !include customize.yaml
+#  internal_url: !secret http_internal_url
+  external_url: !secret http_external_url
+  allowlist_external_urls:
+    - !secret http_allowlist_ext_url1
+    - !secret http_allowlist_ext_url2
+  customize: !include customize.yaml
 
 # API's
 
@@ -72,9 +77,4 @@ o365:
 
 localtuya: !include localtuya.yaml
 
-#http:
-#  ssl_certificate: /config/ssl/myhass.crt
-#  ssl_key: /config/ssl/myhass.key
-#   ssl_certficate: /config/ssl/dickpluim.pem
-#   ssl_key: /config/ssl/dickpluim-key.pem
-
+#http: !include http.yaml

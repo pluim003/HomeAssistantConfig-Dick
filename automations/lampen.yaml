@@ -1,5 +1,5 @@
 # lampen.yaml
-# v2022.01.03
+# v2022.01.04
 #
 # History:
 #
@@ -9,6 +9,9 @@
 #               Modified again as it would only work between sunrise and sunset
 #               Removed light off at sunrise and replaced that with light on at
 #               specific time unless it's too bright outside
+# v2022.01.04 - Modified some thresholds
+#               Changed float to float(0) due to warnings that it wouldn't 
+#               work in release 2022.1
 #
 # This file contains automations for lights
 #
@@ -22,7 +25,7 @@
     at: "07:10:00"
   - platform: numeric_state
     entity_id: sensor.buienradar_irradiance
-    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float(0) }}"
     below: 10
   condition:
     - condition: time
@@ -43,8 +46,8 @@
   trigger:
   - platform: numeric_state
     entity_id: sensor.buienradar_irradiance
-    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
-    above: 10
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float(0) }}"
+    above: 12
   condition:
     - condition: time
       weekday:
@@ -65,8 +68,8 @@
   trigger:
   - platform: numeric_state
     entity_id: sensor.buienradar_irradiance
-    value_template: "{{ states.sensor.buienradar_irradiance.state | float }}"
-    below: 10
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float(0) }}"
+    below: 15
   condition:
     - condition: time
       weekday:

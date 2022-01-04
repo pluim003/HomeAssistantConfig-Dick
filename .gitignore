@@ -33,3 +33,7 @@ tts
 upgrade_hass.sh
 www
 *.swp
+.O365-token-cache/
+http.yaml
+o365_calendars.yaml
+
