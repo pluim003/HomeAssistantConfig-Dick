@@ -1,5 +1,5 @@
 # configuration.yaml
-# v2022.01.03
+# v2022.01.05
 #
 # History:
 #
@@ -7,6 +7,9 @@
 #               split up automations in separate directory
 # v2022.01.03 - Removed some hard-coded API-keys and moved them to secrets.yaml
 #               Changed layout
+#               Added O365-integration
+# v2022.01.04 - Tried to get ssl working without success yet
+# v2002.01.05 - Finally ssl working
 #
 # Configure a default setup of Home Assistant (frontend, api, etc)
 #
@@ -34,7 +37,12 @@ binary_sensor: !include binary_sensor.yaml
 # service: !include services.yaml
 
 homeassistant:
- customize: !include customize.yaml
+  internal_url: !secret http_internal_url
+  external_url: !secret http_external_url
+  allowlist_external_urls:
+    - !secret http_allowlist_ext_url1
+    - !secret http_allowlist_ext_url2
+  customize: !include customize.yaml
 
 # API's
 
@@ -50,13 +58,25 @@ google:
   client_id: !secret google_client_id
   client_secret: !secret google_client_secret
 
-# custom_compoents
+o365:
+  client_id: !secret o365_client_id
+  client_secret: !secret o365_client_secret
+  alt_auth_flow: true
+  email_sensor:
+    - name: inbox
+      max_items: 2
+      is_unread: True
+  query_sensors:
+    - name: "HA Notifications"
+      folder: "Inbox/Test_Inbox"
+      from: "mail@example.com"
+      subject_contains: "Notifcation from home assistant"
+      has_attachment: True
+      max_items: 2
+      is_unread: True
+
+# custom_components
 
 localtuya: !include localtuya.yaml
 
-#http:
-#  ssl_certificate: /config/ssl/myhass.crt
-#  ssl_key: /config/ssl/myhass.key
-#   ssl_certficate: /config/ssl/dickpluim.pem
-#   ssl_key: /config/ssl/dickpluim-key.pem
-
+http: !include http.yaml

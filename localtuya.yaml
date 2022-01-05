@@ -5,6 +5,7 @@
 #
 # v2022.01.02 - Initial version
 # v2022.01.03 - Moved information to secrets.yaml
+#               Added another lamp
 #
 #
 # Localtuya-config 
@@ -35,6 +36,36 @@
       voltage: 1
       current: 1
       current_consumption: 9
+- host: !secret ip_lamp_dick
+  device_id: !secret dev_id_lamp_dick
+  local_key: !secret local_key_lamp_dick
+  friendly_name: Lamp Dick
+  protocol_version: "3.3"
+  entities:
+    - platform: light
+      friendly_name: Lamp Dick
+      brightness_lower: 29
+      brightness_upper: 1000
+      color_temp_min_kelvin: 2700
+      color_temp_max_kelvin: 6500
+      music_mode: false
+      brightness: 101
+      id: 1
+- host: !secret ip_lamp_inge
+  device_id: !secret dev_id_lamp_inge
+  local_key: !secret local_key_lamp_inge
+  friendly_name: Lamp Inge
+  protocol_version: "3.3"
+  entities:
+    - platform: light
+      friendly_name: Lamp Inge
+      brightness_lower: 29
+      brightness_upper: 1000
+      color_temp_min_kelvin: 2700
+      color_temp_max_kelvin: 6500
+      music_mode: false
+      brightness: 101
+      id: 1
 - host: !secret ip_lamp_michel
   device_id: !secret dev_id_lamp_michel
   local_key: !secret local_key_lamp_michel
