@@ -1,22 +1,28 @@
 # logger.yaml
-# v2022.01.02
+# v2022.01.06
 #
 # History:
 #
 # v2022.01.02 - Initial version
-#
+# v2022.01.06 - Added logging of localtuya
+#               Changed default and added log levels to comments
 #
 # Example configuration.yaml entry
-  default: critical
+#
+# LOG LEVELS
+# Possible log severity levels, listed in order from most severe to least severe, are:
+# critical, fatal, error, warning, warn, info, debug, notset
+#
+  default: error
   logs:
     # log level for HA core
     homeassistant.core: warning
 
     # log level for MQTT integration
-    homeassistant.components.mqtt: error
+#    homeassistant.components.mqtt: error
 
     # log level for all python scripts
-    homeassistant.components.python_script: warning
+    homeassistant.components.python_script: error
 
     # individual log level for this python script
 #    homeassistant.components.python_script.my_new_script.py: debug
@@ -25,11 +31,11 @@
 #    homeassistant.components.smartthings.light: info
 
     # log level for a custom component
-#    custom_components.my_integration: debug
+    custom_components.localtuya: fatal
 
     # log level for the `aiohttp` Python package
     aiohttp: error
 
     # log level for both 'glances_api' and 'glances' integration
-    homeassistant.components.glances: fatal
+#    homeassistant.components.glances: fatal
 #    glances_api: fatal
