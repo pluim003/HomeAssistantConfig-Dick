@@ -118,6 +118,10 @@ Information about different sensors.
 
 Information about different switches.
 
+#### template.yaml
+
+Templates. Has to be implemented yet.
+
 ### Not included
 
 - secrets.yaml
