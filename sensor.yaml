@@ -75,7 +75,7 @@
          unit_of_measurement : "kWh"
          value_template: "{{ states('sensor.p1_meter_total_power_import_t1') | round(1, default=0) }} "
        p1_meter_totale_stroom_import_t2:
-         friendly_name: 'Totale export stroom dal'
+         friendly_name: 'Totale import stroom piek'
          unit_of_measurement : "kWh"
          value_template: "{{ states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) }} "
        p1_meter_totale_gas_verbruik:
