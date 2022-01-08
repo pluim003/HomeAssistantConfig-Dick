@@ -1,5 +1,5 @@
 # configuration.yaml
-# v2022.01.05
+# v2022.01.08
 #
 # History:
 #
@@ -12,6 +12,7 @@
 # v2002.01.05 - Finally ssl working
 # v2002.01.06 - Using logger.yaml now
 #               Re-added automations.yaml, next to the automations-dir
+# v2002.01.08 - Added template.yaml
 #
 # Configure a default setup of Home Assistant (frontend, api, etc)
 #
@@ -35,6 +36,7 @@ device_tracker: !include device_track.yaml
 input_select: !include input_select.yaml
 sensor: !include sensor.yaml
 binary_sensor: !include binary_sensor.yaml
+template: !include template.yaml
 # resources: !include resources.yaml
 # switch: !include switches.yaml
 # service: !include services.yaml

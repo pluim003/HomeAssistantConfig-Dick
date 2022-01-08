@@ -1,5 +1,5 @@
 # sensor.yaml
-# v2022.01.07
+# v2022.01.08
 #
 # History:
 #
@@ -8,33 +8,22 @@
 # v2022.01.07 - Added sensors to nicely format the total export/import of
 #               electricity and gas
 #               Added also sensor for total electricity used.
+# v2022.01.08 - Modified layout 
+#               Moved template-sensors to template.yaml
 #
 
-  - platform: command_line                                                                                          
-    name: rpi4_cpu_temperatuur                                                                                      
-    command: "cat /sys/class/thermal/thermal_zone0/temp"                                                            
-    # If errors occur, make sure configuration file is encoded as UTF-8                                              
+  - platform: command_line
+    name: rpi4_cpu_temperatuur
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    unit_of_measurement: "°C"
+    value_template: "{{ value | multiply(0.001) | round(1) }}"
 
-    unit_of_measurement: "°C"                                                                                   
-    value_template: "{{ value | multiply(0.001) | round(1) }}"                                                       
-  - platform: template                                                                                               
-    sensors:                                                                                                         
-      zonsopkomst:                                                                                                   
-        friendly_name: 'Zonsopkomst'                                                                                 
-        value_template: >                                                                                            
-          {{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom(' %H:%M') | replace(" 0", "") }} 
-        icon_template: mdi:weather-sunset-up                                                                         
-      zonsondergang:                                                                                                 
-        friendly_name: 'Zonsondergang'                                                                               
-        value_template: >                                                                                            
-          {{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom(' %H:%M') | replace(" 0", "") }}
-        icon_template: mdi:weather-sunset-down                                                                       
-  - platform: systemmonitor                                                                                          
-    resources:                                                                                                       
-      - type: disk_use_percent                                                                                       
-        arg: /config                                                                                                 
-      - type: memory_free                                                                                            
-                                                                                                                     
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /config
+      - type: memory_free
+
   - platform: afvalwijzer
     provider: mijnafvalwijzer
     postal_code: !secret adres_postcode
@@ -59,30 +48,3 @@
       status_emilie:
         value_template: '{{ states.input_select.status_emilie_dropdown.state }}'
         friendly_name: 'Emilie'
-
-  - platform: template
-    sensors:
-       p1_meter_totale_stroom_export_t1:
-         friendly_name: 'Totale export stroom dal'
-         unit_of_measurement : "kWh"
-         value_template: "{{ states('sensor.p1_meter_total_power_export_t1') | round(1, default=0) }} "
-       p1_meter_totale_stroom_export_t2:
-         friendly_name: 'Totale export stroom piek'
-         unit_of_measurement : "kWh"
-         value_template: "{{ states('sensor.p1_meter_total_power_export_t2') | round(1, default=0) }} "
-       p1_meter_totale_stroom_import_t1:
-         friendly_name: 'Totale import stroom dal'
-         unit_of_measurement : "kWh"
-         value_template: "{{ states('sensor.p1_meter_total_power_import_t1') | round(1, default=0) }} "
-       p1_meter_totale_stroom_import_t2:
-         friendly_name: 'Totale import stroom piek'
-         unit_of_measurement : "kWh"
-         value_template: "{{ states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) }} "
-       p1_meter_totale_gas_verbruik:
-         friendly_name: 'Totale verbruik gas'
-         unit_of_measurement : "m³"
-         value_template: "{{ states('sensor.p1_meter_total_gas') | round(1, default=0) }} "
-       p1_meter_totale_stroom_verbruik:
-         friendly_name: 'Totale verbruik stroom'
-         unit_of_measurement : "kWh"
-         value_template: "{{ (states('sensor.p1_meter_total_power_import_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) -                      states('sensor.p1_meter_total_power_export_t1') |round(1, default=9)  - states('sensor.p1_meter_total_power_export_t2') | round(1, default=0)) | round(1, default=0)  }} "
