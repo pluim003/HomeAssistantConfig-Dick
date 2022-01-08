@@ -33,7 +33,7 @@
       - name: 'Totale gas verbruik'
         unit_of_measurement : "m³"
         state: "{{ states('sensor.p1_meter_total_gas') | round(1, default=0) }} "
-        icon: mdi:gas_cylinder
+        icon: mdi:gas-cylinder
   - sensor: 
       - name: 'Totale stroom verbruik'
         unit_of_measurement : "kWh"
