@@ -10,6 +10,8 @@
 #               Added O365-integration
 # v2022.01.04 - Tried to get ssl working without success yet
 # v2002.01.05 - Finally ssl working
+# v2002.01.06 - Using logger.yaml now
+#               Re-added automations.yaml, next to the automations-dir
 #
 # Configure a default setup of Home Assistant (frontend, api, etc)
 #
@@ -21,10 +23,11 @@ tts:
   - platform: google_translate
 
 group: !include groups.yaml
-automation: !include_dir_merge_list automations
+automation: !include automations.yaml
+automation dir: !include_dir_merge_list automations/
 script: !include scripts.yaml
 scene: !include scenes.yaml
-#logger: !include logger.yaml
+logger: !include logger.yaml
 notify: !include notify.yaml
 proximity: !include proximity.yaml
 camera: !include camera.yaml

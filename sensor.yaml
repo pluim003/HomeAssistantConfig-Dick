@@ -1,10 +1,13 @@
-# sensors.yaml
-# v2022.01.03
+# sensor.yaml
+# v2022.01.07
 #
 # History:
 #
 # v2022.01.02 - Initial version
 # v2022.01.03 - Moved sensitive data to secrets.yaml
+# v2022.01.07 - Added sensors to nicely format the total export/import of
+#               electricity and gas
+#               Added also sensor for total electricity used.
 #
 
   - platform: command_line                                                                                          
@@ -57,4 +60,29 @@
         value_template: '{{ states.input_select.status_emilie_dropdown.state }}'
         friendly_name: 'Emilie'
 
-
+  - platform: template
+    sensors:
+       p1_meter_totale_stroom_export_t1:
+         friendly_name: 'Totale export stroom dal'
+         unit_of_measurement : "kWh"
+         value_template: "{{ states('sensor.p1_meter_total_power_export_t1') | round(1, default=0) }} "
+       p1_meter_totale_stroom_export_t2:
+         friendly_name: 'Totale export stroom piek'
+         unit_of_measurement : "kWh"
+         value_template: "{{ states('sensor.p1_meter_total_power_export_t2') | round(1, default=0) }} "
+       p1_meter_totale_stroom_import_t1:
+         friendly_name: 'Totale import stroom dal'
+         unit_of_measurement : "kWh"
+         value_template: "{{ states('sensor.p1_meter_total_power_import_t1') | round(1, default=0) }} "
+       p1_meter_totale_stroom_import_t2:
+         friendly_name: 'Totale import stroom piek'
+         unit_of_measurement : "kWh"
+         value_template: "{{ states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) }} "
+       p1_meter_totale_gas_verbruik:
+         friendly_name: 'Totale verbruik gas'
+         unit_of_measurement : "m³"
+         value_template: "{{ states('sensor.p1_meter_total_gas') | round(1, default=0) }} "
+       p1_meter_totale_stroom_verbruik:
+         friendly_name: 'Totale verbruik stroom'
+         unit_of_measurement : "kWh"
+         value_template: "{{ (states('sensor.p1_meter_total_power_import_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) -                      states('sensor.p1_meter_total_power_export_t1') |round(1, default=9)  - states('sensor.p1_meter_total_power_export_t2') | round(1, default=0)) | round(1, default=0)  }} "

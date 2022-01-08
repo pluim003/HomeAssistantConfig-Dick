@@ -1,9 +1,10 @@
 # customize.yaml
-# v2022.01.02
+# v2022.01.07
 #
 # History:
 #
 # v2022.01.02 - Initial version
+# v2022.01.07 - Added icons for newly created
 #
 #
 # some customizations
@@ -25,4 +26,16 @@
     entity_picture: /local/afvalwijzer/papier.png
   sensor.status_dick:
     entity_picture: /local/personen/dick.jpg
+  sensor.p1_meter_totale_stroom_export_t1:
+    icon: mdi:flash
+  sensor.p1_meter_totale_stroom_export_t2:
+    icon: mdi:flash
+  sensor.p1_meter_totale_stroom_import_t1:
+    icon: mdi:flash
+  sensor.p1_meter_totale_stroom_import_t2:
+    icon: mdi:flash
+  sensor.p1_meter_totale_gas_verbruik:
+    icon: mdi:gas-cylinder
+  sensor.p1_meter_totale_stroom_verbruik:
+    icon: mdi:flash
 

@@ -1,9 +1,11 @@
 # schakelaar.yaml
-# v2022.01.02
+# v2022.01.07
 #
 # History:
 #
 # v2022.01.02 - Initial version
+# v2022.01.07 - Delay of 5 minutes before turning off switch when no-one is
+#               at home
 #
 # This file contains automations for switches
 #
@@ -15,8 +17,9 @@
   trigger:
   - platform: state
     entity_id: group.familie
-    from: 'home'
     to: 'not_home'
+    for: 
+      minutes: 5
   condition:
   action:
     service: switch.turn_off
