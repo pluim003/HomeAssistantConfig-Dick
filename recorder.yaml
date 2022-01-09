@@ -1,0 +1,10 @@
+# recorder.yaml
+# v2022.01.09
+#
+# History:
+#
+# v2022.01.09 - Initial version
+#
+# This file contains the information to record data
+#
+  db_url: !secret mariadb_url
