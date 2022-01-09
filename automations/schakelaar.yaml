@@ -1,11 +1,12 @@
 # schakelaar.yaml
-# v2022.01.07
+# v2022.01.09
 #
 # History:
 #
 # v2022.01.02 - Initial version
 # v2022.01.07 - Delay of 5 minutes before turning off switch when no-one is
 #               at home
+# v2022.01.09 - Moved switches from original automations.yaml to this file
 #
 # This file contains automations for switches
 #
@@ -36,4 +37,102 @@
   action:
     service: switch.turn_on
     entity_id: switch.schakelaar_av_apparatuur
+
+# Christmastree-switch
+
+- id: kerstboom_aan_op_werkdagen
+  alias: Kerstboom aan op werkdagen
+  trigger:
+  - platform: time
+    at: 06:45:00
+  condition:
+    condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  action:
+    service: switch.turn_on
+    entity_id: switch.kerstboom
+- id: kerstboom_aan_in_weekend
+  alias: Kerstboom aan in weekend
+  trigger:
+  - platform: time
+    at: 08:00:00
+  condition:
+    condition: time
+    weekday:
+    - sat
+    - sun
+  action:
+    service: switch.turn_on
+    entity_id: switch.kerstboom
+- id: kerstboom_uit_op_zondag_tm_donderdag
+  alias: Kerstboom uit op zondag t/m donderdag
+  trigger:
+  - platform: time
+    at: '23:00:00'
+  condition:
+    condition: time
+    weekday:
+    - sun
+    - mon
+    - tue
+    - wed
+    - thu
+  action:
+    service: switch.turn_off
+    entity_id: switch.kerstboom
+- id: kerstboom_uit_op_vrijdag_en_zaterdag
+  alias: Kerstboom uit op vrijdag en zaterdag
+  trigger:
+  - platform: time
+    at: '23:30:00'
+  condition:
+    condition: time
+    weekday:
+    - fri
+    - sat
+  action:
+    service: switch.turn_off
+    entity_id: switch.kerstboom
+
+# Christmas-lights in the backyard which will be used the whole year
+
+- id: kerstverlichting_aan
+  alias: Kerstverlichting aan
+  trigger:
+  - platform: time
+    at: 06:45:00
+  action:
+    service: switch.turn_on
+    entity_id: switch.kerstverlichting
+- id: kerstverlichting_aan_bij_zonsondergang
+  alias: Kerstverlichting aan bij zonsondergang
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: +00:30:00
+  action:
+    service: switch.turn_on
+    entity_id: switch.kerstverlichting
+- id: kerstverlichting_uit
+  alias: Kerstverlichting uit
+  trigger:
+  - platform: time
+    at: '23:00:00'
+  action:
+    service: switch.turn_off
+    entity_id: switch.kerstverlichting
+- id: kerstverlichting_uit_na_zonsopkomst
+  alias: Kerstverlichting uit na zonsopkomst
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: -00:30:00
+  action:
+    service: switch.turn_off
+    entity_id: switch.kerstverlichting
 
