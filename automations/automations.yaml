@@ -52,38 +52,6 @@
               title: Afval verwerkt
               icon: sfsymbols:trash.circle
 
-- id: afval_herstel_notificatie
-  alias: Afval - Herstel notificatie
-  trigger:
-    platform: state
-    entity_id: input_boolean.waste_moved
-    to: "on"
-    for:
-      hours: 12
-  action:
-    - service: input_boolean.turn_off
-      entity_id: input_boolean.waste_moved
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.waste_reminder
-
-- id: afval_bevestig_notificatie
-  alias: Afval - Bevestig notificatie
-  trigger:
-    - platform: event
-      event_type: mobile_app_notification_action
-      event_data:
-        action: "MARK_WASTE_MOVED"
-  action:
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.waste_moved
-    - service: notify.family
-      data:
-        title: 'Afval'
-        message: 'Afvaltype(n): {{ states.sensor.afvalwijzer_tomorrow_formatted.state }} zijn aan de straat gezet.'
-        data:
-          push:
-            badge: 0        
-
 - id: '300m_van_huis'
   alias: Iemand is 300m van huis en op weg naar huis
   mode: single
