@@ -40,6 +40,7 @@ template: !include template.yaml
 # resources: !include resources.yaml
 # switch: !include switches.yaml
 # service: !include services.yaml
+recorder: !include recorder.yaml
 
 homeassistant:
   internal_url: !secret http_internal_url
