@@ -1,10 +1,12 @@
 # template.yaml
-# v2022.01.08
+# v2022.01.11
 #
 # History:
 #
 # v2022.01.07 - Initial empty version
 # v2022.01.08 - Added template-sensors from sensor.yaml
+# v2022.01.11 - Added 2 sensors to keep track of total imported and 
+#               total exported electricity
 #
 
 # sensors to layout the energy ussage a bit nicer
@@ -34,6 +36,16 @@
         unit_of_measurement : "m³"
         state: "{{ states('sensor.p1_meter_total_gas') | round(1, default=0) }} "
         icon: mdi:gas-cylinder
+  - sensor:
+      - name: 'Totale stroom import'
+        unit_of_measurement : "kWh"
+        state: "{{ (states('sensor.p1_meter_total_power_import_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_import_t2') | round(1, default=0)) | round(1, default=0) }} "
+        icon: mdi:flash
+  - sensor:
+      - name: 'Totale stroom export'
+        unit_of_measurement : "kWh"
+        state: "{{ (states('sensor.p1_meter_total_power_export_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_export_t2') | round(1, default=0)) | round(1, default=0) }} "
+        icon: mdi:flash
   - sensor: 
       - name: 'Totale stroom verbruik'
         unit_of_measurement : "kWh"
