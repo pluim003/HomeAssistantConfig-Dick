@@ -1,0 +1,17 @@
+# influxdb.yaml
+# v2022.01.10
+#
+# History:
+#
+# v2022.01.10 - Initial version
+#
+# This file contains the information to record data
+#
+
+  host: 172.17.0.5
+  port: 8086
+  database: hass
+  username: hass
+  password: D1ck2201HA!
+  max_retries: 3
+  default_measurement: state
