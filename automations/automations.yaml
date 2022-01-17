@@ -1,5 +1,5 @@
 # automations.yaml
-# v2022.01.09
+# v2022.01.17
 #
 # History:
 #
@@ -7,6 +7,9 @@
 # v2022.01.03 - Removed Honeywell Lyric-fix as it was already in verwarming.yaml
 # v2022.01.09 - Minor change in garbage and removed a yet unused automation
 #               Moved stuff to schakelaar.yaml
+# v2022.01.11 - Added automation to get an alarm when phone and iPad are almost 
+#               charged 
+# v2022.01.17 - Notify-entries changed as no notifications where getting through
 #
 # This file contains my automations
 #
@@ -38,8 +41,7 @@
       value_template: "{{ states(sensor) != 'Geen' }}"
   action:
     - alias: "Notification phones"
-      service: notify.telefoon_dick
-      service: notify.telefoon_inge
+      service: notify.mobile_app_sm_a725f
       data:
         title: "Denk aan de {{ states(sensor) }} container"
         message: "{{ trigger.id.split('_')[0] }} moet {{ states(sensor) }} naar buiten"
@@ -66,7 +68,7 @@
     - condition: template
       value_template: '{{ trigger.to_state.attributes.dir_of_travel  == "towards" }}'
   action:
-  - service: notify.telefoon_dick
+  - service: notify.mobile_app_sm_a725f
     data_template:
       message: "{{trigger.to_state.object_id[:-5] | capitalize}} is 300m van huis!"
 
@@ -85,4 +87,37 @@
       entity_id: media_player.slaapkamer_i_en_d
       message: Het lijkt erop dat Dick afwezig is!
     service: tts.google_translate_say
+
+# batterij bijna vol
+
+- id: 'telefoon_dick_bijna_opgeladen'
+  alias: Telefoon Dick bijna opgeladen
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.sm_a725f_battery_level
+    from: '94'
+    to: '95'
+  condition: []
+  action:
+  - service: notify.mobile_app_sm_a725f
+    data:
+      message: Telefoon bijna opgeladen
+  mode: single
+
+- id: 'Ipad_dick_bijna_opgeladen'
+  alias: Ipad Dick bijna opgeladen
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.ipad_van_dick_battery_level
+    from: '94'
+    to: '95'
+  condition: []
+  action:
+  - service: notify.mobile_app_sm_a725f
+    data:
+      message: Ipad bijna opgeladen
+  mode: single
+
 
