@@ -1,5 +1,5 @@
 # sensor.yaml
-# v2022.01.08
+# v2022.01.19
 #
 # History:
 #
@@ -10,6 +10,7 @@
 #               Added also sensor for total electricity used.
 # v2022.01.08 - Modified layout 
 #               Moved template-sensors to template.yaml
+# v2022.01.19 - Modified afvalwijzer-sensor due to new release of that add-on
 #
 
   - platform: command_line
@@ -29,7 +30,7 @@
     postal_code: !secret adres_postcode
     street_number: !secret adres_huisnummer
     suffix: !secret adres_toevoeging
-    include_date_today: false
+    exclude_pickup_today: false
     default_label: Geen
     id: ''
     exclude_list: ' ' 
