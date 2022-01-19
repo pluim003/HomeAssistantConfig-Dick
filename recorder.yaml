@@ -8,3 +8,4 @@
 # This file contains the information to record data
 #
   db_url: !secret mariadb_url
+

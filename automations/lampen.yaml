@@ -1,5 +1,5 @@
 # lampen.yaml
-# v2022.01.07
+# v2022.01.11
 #
 # History:
 #
@@ -16,6 +16,8 @@
 #               turn the light on, but not off anymore as the lower value
 #               was too low. And removed Wednesday as this is my regular
 #               day off
+# v2022.01.11 - Some automations don't need to run on Thursdays and a few
+#               times on Tuedays
 #
 # This file contains automations for lights
 #
@@ -36,7 +38,7 @@
       weekday:
       - mon
       - tue
-      - thu
+#      - thu
       - fri    
     - condition: state
       entity_id: light.lamp_michel
@@ -56,8 +58,8 @@
     - condition: time
       weekday:
       - mon
-      - tue
-      - thu
+#      - tue
+#      - thu
       - fri
     - condition: state
       entity_id: light.lamp_michel
@@ -77,8 +79,8 @@
     - condition: time
       weekday:
       - mon
-      - tue
-      - thu
+#      - tue
+#      - thu
       - fri
     - condition: state
       entity_id: light.lamp_michel

@@ -8,10 +8,10 @@
 # This file contains the information to record data
 #
 
-  host: 172.17.0.5
-  port: 8086
-  database: hass
-  username: hass
-  password: D1ck2201HA!
+  host: !secret influx_host
+  port: !secret influx_port
+  database: !secret influx_db
+  username: !secret influx_user
+  password: !secret influx_pw
   max_retries: 3
   default_measurement: state

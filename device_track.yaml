@@ -1,5 +1,4 @@
 # device_track.yaml
-# v2022.01.03
 # v2022.01.13
 #
 # History:
@@ -7,6 +6,8 @@
 # v2022.01.02 - Initial version
 # v2022.01.03 - Moved ip-addresses to secrets.yaml
 # v2022.01.13 - Added extra ip-addresses to use another wifi-network
+#               Added more and changed naming convention, so original will be
+#               removed later.
 #
 # This file contains the information for the devices to track
 #
@@ -21,7 +22,11 @@
     telefoon_emilie: !secret ip_emilie
     telefoon_inge: !secret ip_inge
     telefoon_michel: !secret ip_michel
-    telefoon_dick_ip2: !secret ip2_dick
-    telefoon_emilie_ip2: !secret ip2_emilie
-    telefoon_inge_ip2: !secret ip2_inge
-    telefoon_michel_ip2: !secret ip2_michel
+    telefoon_ip1_dick: !secret ip_dick
+    telefoon_ip1_emilie: !secret ip_emilie
+    telefoon_ip1_inge: !secret ip_inge
+    telefoon_ip1_michel: !secret ip_michel
+    telefoon_ip2_dick: !secret ip2_dick
+    telefoon_ip2_emilie: !secret ip2_emilie
+    telefoon_ip2_inge: !secret ip2_inge
+    telefoon_ip2_michel: !secret ip2_michel

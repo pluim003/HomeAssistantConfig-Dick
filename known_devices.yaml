@@ -6,7 +6,7 @@
 # v2022.01.02 - Initial version
 #
 
-telefoon_dick:
+telefoon_ip1_dick:
   hide_if_away: false
   mac:
   name: Dick
@@ -15,7 +15,7 @@ telefoon_dick:
   picture:
   track: true
 
-telefoon_emilie:
+telefoon_ip1_emilie:
   hide_if_away: false
   mac:
   name: Emilie
@@ -23,7 +23,7 @@ telefoon_emilie:
   picture:
   track: true
 
-telefoon_michel:
+telefoon_ip1_michel:
   hide_if_away: false
   mac:
   name: Michel
@@ -31,10 +31,44 @@ telefoon_michel:
   picture:
   track: true
 
-telefoon_inge:
+telefoon_ip1_inge:
   name: Inge
   hide_if_away: false
   mac:
   icon:
   picture:
   track: true
+
+telefoon_ip2_dick:
+  mac:
+  name: Dick
+  picture: /local/personen/dick.jpg
+  icon:
+  picture:
+  track: true
+
+telefoon_ip2_emilie:
+  hide_if_away: false
+  mac:
+  name: Emilie
+  icon:
+  picture:
+  track: true
+
+telefoon_ip2_michel:
+  hide_if_away: false
+  mac:
+  name: Michel
+  icon:
+  picture:
+  track: true
+
+telefoon_ip2_inge:
+  name: Inge
+  hide_if_away: false
+  mac:
+  icon:
+  picture:
+  track: true
+
+
