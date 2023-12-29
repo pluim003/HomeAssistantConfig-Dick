@@ -1,21 +1,39 @@
 # device_track.yaml
-# v2022.01.03
+# v2023.12.09
 #
 # History:
 #
 # v2022.01.02 - Initial version
 # v2022.01.03 - Moved ip-addresses to secrets.yaml
+# v2022.01.13 - Added extra ip-addresses to use another wifi-network
+#               Added more and changed naming convention, so original will be
+#               removed later.
+# v2023.12.09 - Removed ping (or better hashed out)
+# v2023.12.10 - Added iphonedetect (replaces ping)
+
 #
 # This file contains the information for the devices to track
 #
 # device-tracking to check if people are away or at home
 # I use this method as not everyone wants to install the HomeAssistant app
 #
-- platform: ping
-  interval_seconds: 30
-  consider_home: 300
+- platform: iphonedetect 
+#  count: 5
+  consider_home: 60
+  new_device_defaults:
+    track_new_devices: true
   hosts:
-    telefoon_dick: !secret ip_dick
-    telefoon_emilie: !secret ip_emilie
-    telefoon_inge: !secret ip_inge
-    telefoon_michel: !secret ip_michel
+    telefoon_arp_ip1_dick: !secret ip1_dick
+    telefoon_arp_ip1_emilie: !secret ip1_emilie
+ #   telefoon_ip1_inge: !secret ip1_inge
+ #   telefoon_ip1_michel: !secret ip1_michel
+ #   telefoon_ip1_michelle: !secret ip1_michelle
+    telefoon_arp_ip2_dick: !secret ip2_dick
+    telefoon_arp_ip2_emilie: !secret ip2_emilie
+ #   telefoon_ip2_inge: !secret ip2_inge
+ #   telefoon_ip2_michel: !secret ip2_michel
+ #   telefoon_ip2_michelle: !secret ip2_michelle
+
+- platform: mqtt_json
+  devices:
+    bresser_slaapkamer: Nexus-TH/249

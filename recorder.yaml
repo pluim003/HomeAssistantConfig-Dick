@@ -1,0 +1,38 @@
+# recorder.yaml
+# v2023.12.28
+#
+# History:
+#
+# v2022.01.09 - Initial version
+# v2023.01.30 - Update because of unwanted purging
+# v2023.12.10 - Modified purge_keep_days from 91 to 365
+# v2023.12.20 - Added some excludes
+# v2023.12.22 - Removed some excludes
+# v2023.12.28 - Added include sensor.buienradar_irradiance
+#
+# This file contains the information to record data
+#
+#  db_url: !secret mariadb_url
+
+  exclude:
+    domains: 
+      - device_tracker
+    entity_globs:
+      - sensor.actueel_stroom*
+      - sensor.elzenlaan*
+      - sensor.deurbel*
+      - light.*
+      - automation.*
+      - button.fritz*
+      - update.fritz*
+      - sensor.*down
+      - sensor.*up
+      - switch.*
+  include:
+    entities:
+      - sensor.buienradar_irradiance
+
+  auto_purge: true
+  purge_keep_days: 365
+
+

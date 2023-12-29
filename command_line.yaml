@@ -1,0 +1,21 @@
+# command_line.yaml
+# v2023.06.16
+#
+# History:
+#
+# v2023.06.16 - Initial version
+#
+# This file contains the command_line stuff
+
+  - sensor:
+      name: rpi4_cpu_temperatuur
+      command: "cat /sys/class/thermal/thermal_zone0/temp"
+      unit_of_measurement: "..C"
+      value_template: "{{ value | multiply(0.001) | round(1) }}"
+
+#
+  #- platform: workday
+    #country: NL
+    #workdays: [mon, tue, wed, thu, fri]
+    #excludes: [sat, sun, holiday]
+

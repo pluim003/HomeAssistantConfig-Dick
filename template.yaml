@@ -1,9 +1,177 @@
 # template.yaml
-# v2022.01.07
+# v2023.12.24
 #
 # History:
 #
 # v2022.01.07 - Initial empty version
+# v2022.01.08 - Added template-sensors from sensor.yaml
+# v2022.01.11 - Added 2 sensors to keep track of total imported and 
+#               total exported electricity
+# v2022.04.22 - Added sensor to show the total solar power since 
+#               installation on June 12th, 2013, the kwhmeter was installed
+#               on April 20th, 2022
+# v2022.04.28 - Added sensor to see actual energy-usage (solarproduction + actual total usage (which included solar-panelt-return)
+# v2022.05.09 - Modified the calculation for total solar power since installation as it was slightly off,
+#               seems that solar panels produce slightly more then the kwhmeter reports
+# v2022.07.09 - Modified the calculation for total solar power since installation again (1.0047 to 1.0051).
+# v2022.08.19 - Added calculaton for watermeter
+# v2022.08.26 - Modified calculation for total watermeter (subtracted 0.044)
+# v2022.10.12 - Instalation of new watermeter requires new values
+# v2023.01.23 - Added sensors for prijsplafond-cap
+# v2023.01.31 - Added sensors to find out last day of month and number of days until next month
+#               and added 2 more sensors for prijsplafond.
+# v2023.02.01 - Modified the 2 new sensors for prijsplafond so that they use 2 digits after the comma
+# v2023.02.14 - Modified watermeterstand as after the internet having been
+#               down for a week the watermeterstand increased by 6, giving a 
+#               too high value
+# v2023.12.12 - Corrected watermeterstand by 23,491
+# v2023.12.20 - Removed prijsplafond
+# v2023.12.23 - Added sensor for unmonitored energy
+# v2023.12.24 - Small correction in total solar power since installation (it was off by 1,2kWh,
+#               instead of using 1,051 as multiplier changed it to 1,048)
 #
 
+# sensors to layout the energy ussage a bit nicer
+
+  - sensor:
+      - name: "Totale stroom export dal"
+        unit_of_measurement : "kWh"
+        state: "{{ states('sensor.p1_meter_total_power_export_t1') | round(1, default=0) }} "
+        icon: mdi:flash
+  - sensor:
+      - name: 'Totale stroom export piek'
+        unit_of_measurement : "kWh"
+        state: "{{ states('sensor.p1_meter_total_power_export_t2') | round(1, default=0) }} "
+        icon: mdi:flash
+  - sensor:
+      - name: 'Totale stroom import dal'
+        unit_of_measurement : "kWh"
+        state: "{{ states('sensor.p1_meter_total_power_import_t1') | round(1, default=0) }} "
+        icon: mdi:flash
+  - sensor:
+      - name: 'Totale stroom import piek'
+        unit_of_measurement : "kWh"
+        state: "{{ states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) }} "
+        icon: mdi:flash
+  - sensor:
+      - name: 'Totale gas verbruik'
+        unit_of_measurement : "m³"
+        state: "{{ states('sensor.p1_meter_total_gas') | round(1, default=0) }} "
+        icon: mdi:gas-cylinder
+  - sensor:
+      - name: 'Totale stroom import'
+        unit_of_measurement : "kWh"
+        state: "{{ (states('sensor.p1_meter_total_power_import_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_import_t2') | round(1, default=0)) | round(1, default=0) }} "
+        icon: mdi:flash
+  - sensor:
+      - name: 'Totale stroom export'
+        unit_of_measurement : "kWh"
+        state: "{{ (states('sensor.p1_meter_total_power_export_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_export_t2') | round(1, default=0)) | round(1, default=0) }} "
+        icon: mdi:flash
+  - sensor: 
+      - name: 'Totale stroom verbruik'
+        unit_of_measurement : "kWh"
+        state: "{{ (states('sensor.p1_meter_total_power_import_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) - states('sensor.p1_meter_total_power_export_t1') |round(1, default=0)  - states('sensor.p1_meter_total_power_export_t2') | round(1, default=0)) | round(1, default=0)  }} "
+        icon: mdi:flash
+  - sensor:
+      - name: 'Actueel stroom verbruik'
+        unit_of_measurement : "W"
+#        state: "{{ max( 0, (states('sensor.p1_meter_active_power') | float(default=0)  - states('sensor.kwh_meter_zonnepanelen_active_power') | float(default=0))) }}"
+        state: "{{ (states('sensor.p1_meter_active_power') | float(default=0)  - states('sensor.kwh_meter_zonnepanelen_active_power') | float(default=0)) }}"
+        icon: mdi:flash
+
+# sensor to add my total production of the solarpanels before buying
+# a kwh-meter
+
+  - sensor:
+      - name: 'Zonnepanelen opbrengst sinds aanschaf'
+        unit_of_measurement : "kWh"
+        availability: "{{ states('sensor.kwh_meter_zonnepanelen_total_power_export') | is_number }}"
+        state: "{{ (1.0048*states('sensor.kwh_meter_zonnepanelen_total_power_export') | float  + 21782.55) | round(1) }}"
+        icon: mdi:solar-power
+
+# sensors for sunrise and sunset
+
+  - sensor:
+      - name: 'Zonsopkomst'
+        state: >
+          {{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom(' %H:%M') | replace(" 0", "") }}
+        icon: mdi:weather-sunset-up
+  - sensor:
+        name: 'Zonsondergang'
+        state: >
+          {{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom(' %H:%M') | replace(" 0", "") }}
+        icon: mdi:weather-sunset-down
+
+# sensor for total waterusage (since the beginning Dec 2005)
+
+  - sensor: 
+      - name: 'Waterverbruik_totaal'
+        unit_of_measurement: "m³"
+        availability: "{{ states('sensor.watermeter_total_water_usage') | is_number }}"
+        state: "{{ (states('sensor.watermeter_total_water_usage') | float  + 1698.8 - 14.282 - 23.491 ) | round(3) }}"
+        icon: mdi:water
+
+# sensor for new watermeter placed on October 12th, 2022. Subtracted value of usage since installation of 
+# the watermeter on August 19th, 2022. Value on new watermeter 0.049 added.
+
+  - sensor:                                                     
+      - name: 'Watermeterstand'                                            
+        unit_of_measurement: "m³" 
+        availability: "{{ states('sensor.watermeter_total_water_usage') | is_number }}"                                           
+        state: "{{ (states('sensor.watermeter_total_water_usage') | float  - 14.282 + 0.049 - 3.82 - 23.491) | round(3) }}"    
+        icon: mdi:water                                                                
+
+# sensors to find out last day of month and number of days until start of next month to be used with prijsplafond 
+
+  - sensor:
+      - name: Last Day of the Month
+        icon: mdi:calendar
+        #state: "{{ (now() + timedelta(days=1)).day == 1 }}"
+        state: "{{ ((now().replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)).day }}"
+    #    state: "{{ 31 if now().month == 12 else (now().replace(month=now().month+1, day=1) - timedelta(days=1)).day }}"
+      
+      - name: Current Day
+        icon: mdi:calendar
+        state: "{{ now().day }}"
+
+      - name: Days until next Month
+        icon: mdi:calendar
+       # state: "{{ sensor.last_day_of_the_month - sensor.current_day +1 }}"
+        state: "{{ states('sensor.last_day_of_the_month')|int(default=0) - states('sensor.current_day')|int(default=0) +1 }}" 
+
+  - sensor:
+      - name: Gemonitorde electriciteit
+        state: >
+          {{ states.sensor 
+             | selectattr('object_id', 'match', 'totaalverbruik_plug_')
+             | rejectattr('state', 'in', ['unavailable', 'unknown'])
+             | map(attribute='state') | map('float', none)
+             | reject('==', none)
+             | sum | round(2) }}
+        unit_of_measurement: kWh
+        icon: mdi:flash
+        state_class: total
+
+  - sensor:
+      - name: Niet gemonitorde electriciteit_nog_niet_werkend
+        state: >
+          {{ (states('sensor.totale_stroom_verbruik') | float) -  
+            (states('sensor.gemonitorde_electriciteit') | float) 
+          }}
+        device_class: energy
+        unit_of_measurement: kWh
+#        state_class: total_increasing
+
+  - sensor:
+      - name: Niet gemonitorde electriciteit
+        state: >
+          {{  (states('sensor.p1_meter_total_power_import_t1') | float) + 
+            (states('sensor.p1_meter_total_power_import_t2') |  float) - 
+            (states('sensor.gemonitorde_electriciteit') | float) -
+             11862.38
+          }}
+        device_class: energy
+        unit_of_measurement: kWh
+        state_class: total
 

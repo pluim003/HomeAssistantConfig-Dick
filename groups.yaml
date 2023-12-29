@@ -1,14 +1,28 @@
 # groups.yaml
-# v2022.01.02
+# v2022.01.14
 #
 # History:
 #
 # v2022.01.02 - Initial version
+# v2022.01.14 - Added extra trackers for the second wifi-network
 #
 familie:
   name: Familie
   entities:
-    - device_tracker.telefoon_dick
-    - device_tracker.telefoon_emilie
-    - device_tracker.telefoon_inge
-    - device_tracker.telefoon_michel
+    - person.dick_pluim
+    - device_tracker.telefoon_ip1_dick
+    - device_tracker.telefoon_ip1_emilie
+    - person.emilie_pluim
+    - device_tracker.telefoon_ip1_inge
+    - person.inge_nielsen
+    - device_tracker.telefoon_ip1_michel
+    - device_tracker.telefoon_ip2_dick
+    - device_tracker.telefoon_ip2_emilie
+    - device_tracker.telefoon_ip2_inge
+    - device_tracker.telefoon_ip2_michel
+    - person.michel_pluim
+    - device_tracker.telefoon_ip1_michelle
+    - device_tracker.telefoon_ip2_michelle
+    - device_tracker.dicks_iphone_14_pm
+    - person.michelle_miller
+

@@ -1,5 +1,5 @@
 # sensor.yaml
-# v2022.01.07
+# v2023.06.16
 #
 # History:
 #
@@ -8,39 +8,28 @@
 # v2022.01.07 - Added sensors to nicely format the total export/import of
 #               electricity and gas
 #               Added also sensor for total electricity used.
+# v2022.01.08 - Modified layout 
+#               Moved template-sensors to template.yaml
+# v2022.01.19 - Modified afvalwijzer-sensor due to new release of that add-on
+# v2022.05.03 - Added brandstofprijzen
+# v2022.06.10 - Added sensor to get rid of spikes in 'actueel stroom verbruik'
+# v2023.01.09 - Added sensor for prijsplafond
+# v2023.06.16 - Moved rpi4_cpu_temperature to command_line.yaml
+# v2023.12.20 - Removed sensor for prijsplafond
 #
 
-  - platform: command_line                                                                                          
-    name: rpi4_cpu_temperatuur                                                                                      
-    command: "cat /sys/class/thermal/thermal_zone0/temp"                                                            
-    # If errors occur, make sure configuration file is encoded as UTF-8                                              
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /config
+      - type: memory_free
 
-    unit_of_measurement: "°C"                                                                                   
-    value_template: "{{ value | multiply(0.001) | round(1) }}"                                                       
-  - platform: template                                                                                               
-    sensors:                                                                                                         
-      zonsopkomst:                                                                                                   
-        friendly_name: 'Zonsopkomst'                                                                                 
-        value_template: >                                                                                            
-          {{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom(' %H:%M') | replace(" 0", "") }} 
-        icon_template: mdi:weather-sunset-up                                                                         
-      zonsondergang:                                                                                                 
-        friendly_name: 'Zonsondergang'                                                                               
-        value_template: >                                                                                            
-          {{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom(' %H:%M') | replace(" 0", "") }}
-        icon_template: mdi:weather-sunset-down                                                                       
-  - platform: systemmonitor                                                                                          
-    resources:                                                                                                       
-      - type: disk_use_percent                                                                                       
-        arg: /config                                                                                                 
-      - type: memory_free                                                                                            
-                                                                                                                     
   - platform: afvalwijzer
     provider: mijnafvalwijzer
     postal_code: !secret adres_postcode
     street_number: !secret adres_huisnummer
     suffix: !secret adres_toevoeging
-    include_date_today: false
+    exclude_pickup_today: false
     default_label: Geen
     id: ''
     exclude_list: ' ' 
@@ -60,29 +49,25 @@
         value_template: '{{ states.input_select.status_emilie_dropdown.state }}'
         friendly_name: 'Emilie'
 
-  - platform: template
-    sensors:
-       p1_meter_totale_stroom_export_t1:
-         friendly_name: 'Totale export stroom dal'
-         unit_of_measurement : "kWh"
-         value_template: "{{ states('sensor.p1_meter_total_power_export_t1') | round(1, default=0) }} "
-       p1_meter_totale_stroom_export_t2:
-         friendly_name: 'Totale export stroom piek'
-         unit_of_measurement : "kWh"
-         value_template: "{{ states('sensor.p1_meter_total_power_export_t2') | round(1, default=0) }} "
-       p1_meter_totale_stroom_import_t1:
-         friendly_name: 'Totale import stroom dal'
-         unit_of_measurement : "kWh"
-         value_template: "{{ states('sensor.p1_meter_total_power_import_t1') | round(1, default=0) }} "
-       p1_meter_totale_stroom_import_t2:
-         friendly_name: 'Totale import stroom piek'
-         unit_of_measurement : "kWh"
-         value_template: "{{ states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) }} "
-       p1_meter_totale_gas_verbruik:
-         friendly_name: 'Totale verbruik gas'
-         unit_of_measurement : "m³"
-         value_template: "{{ states('sensor.p1_meter_total_gas') | round(1, default=0) }} "
-       p1_meter_totale_stroom_verbruik:
-         friendly_name: 'Totale verbruik stroom'
-         unit_of_measurement : "kWh"
-         value_template: "{{ (states('sensor.p1_meter_total_power_import_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) -                      states('sensor.p1_meter_total_power_export_t1') |round(1, default=9)  - states('sensor.p1_meter_total_power_export_t2') | round(1, default=0)) | round(1, default=0)  }} "
+  - platform: brandstofprijzen
+    monitored_variables:
+      - euro95
+      - diesel
+      - lpg
+      - super
+      - super_mlv
+      - premium_benzines
+      - premium_diesels
+    icon: mdi:gas-station
+    unit_of_measurement: €/L
+    prefix: Adviesprijs
+    scan_interval:
+        hours: 1
+
+  - platform: filter                                                                                                 
+    name: "Actueel stroom verbruik gefilterd"                                                                        
+    entity_id: sensor.actueel_stroom_verbruik                                                                    
+    filters:                                                                                                         
+      - filter: time_simple_moving_average                                                                             
+        window_size: "00:00:30"                                                                                        
+
