@@ -1,0 +1,20 @@
+{
+    "codeowners": [
+        "@rbrink"
+    ],
+    "config_flow": true,
+    "dependencies": [],
+    "after_dependencies": [
+        "history",
+        "recorder"
+    ],
+    "documentation": "https://github.com/rbrink/Home-Assistant-Prijsplafond",
+    "domain": "prijsplafond",
+    "issue_tracker": "https://github.com/rbrink/Home-Assistant-Prijsplafond/issues",
+    "name": "Prijsplafond",
+    "requirements": [],
+    "version": "1.0.7",
+    "iot_class": "local_push",
+    "integration_type": "hub",
+    "loggers": ["custom_components.prijsplafond"]
+}

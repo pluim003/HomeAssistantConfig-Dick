@@ -1,9 +1,17 @@
+!.gitignore
+
+
+# ignore some extensions
+
 *.swp
 *bak
 *cop
 *goed
 *new
-.HA_VERSION
+*.py*
+
+# ignore directories
+
 .O365-token-cache/
 .google.token
 .storage
@@ -11,23 +19,26 @@ HomeAssistantConfig-Dick
 auth
 auth_module.totp
 auth_provider.homeassistant
-automations.yaml
 automations.yaml_met_afval
 blueprints/
 camera
 configuration.yaml_211222
 configuration.yaml_http
 core*
-custom_components/
 energy
 frontend.user_data*
-google_calendars.yaml
 home-assistant*
 image
 lovelace_resources
-o365_calendars.yaml
-secrets.yaml
 sensor.safe
 ssl
 tts
 www
+
+# These should always be ignored
+
+google_calendars.yaml
+o365_calendars.yaml
+secrets.yaml
+.ignore
+
