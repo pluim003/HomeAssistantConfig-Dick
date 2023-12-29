@@ -1,9 +1,10 @@
 # sensors.yaml
-# v2022.01.05
+# v2022.11.28
 #
 # History:
 #
 # v2022.01.05 - Initial version
+# v2022.11.28 - Added extra trusted proxy
 
   use_x_forwarded_for: true
   server_port: 8123
@@ -19,5 +20,7 @@
     - !secret http_trusted_proxies_5
     - !secret http_trusted_proxies_6
     - !secret http_trusted_proxies_7
+    - !secret http_trusted_proxies_8
+
 
 

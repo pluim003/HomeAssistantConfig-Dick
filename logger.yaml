@@ -1,11 +1,18 @@
 # logger.yaml
-# v2022.01.06
+# v2023.12.26
 #
 # History:
 #
 # v2022.01.02 - Initial version
 # v2022.01.06 - Added logging of localtuya
 #               Changed default and added log levels to comments
+# v2022.05.03 - Changed homeassistant.core from warning to error
+# v2023.01.27 - Added debuglogging for prijsplafond-integration
+# v2023.01.30 - Modified debuglogging localtuya
+# v2023.02.14 - Added debuglogging for localtuya and removed for prijsplafond
+# v2023.12.10 - Added debuglogging for iphonedetect
+# v2023.12.20 - Added debuglogging for mqtt and removed iphonedetect
+# v2023.12.26 - Removed debuglogging for mqtt
 #
 # Example configuration.yaml entry
 #
@@ -16,7 +23,7 @@
   default: error
   logs:
     # log level for HA core
-    homeassistant.core: warning
+    homeassistant.core: error
 
     # log level for MQTT integration
 #    homeassistant.components.mqtt: error
@@ -31,7 +38,8 @@
 #    homeassistant.components.smartthings.light: info
 
     # log level for a custom component
-    custom_components.localtuya: fatal
+    custom_components.localtuya: debug
+    custom_components.prijsplafond: error 
 
     # log level for the `aiohttp` Python package
     aiohttp: error
@@ -39,3 +47,9 @@
     # log level for both 'glances_api' and 'glances' integration
 #    homeassistant.components.glances: fatal
 #    glances_api: fatal
+
+  #  homeassistant.components.influxdb: debug 
+
+  #  custom_components.afvalwijzer: debug
+  #  custom_components.iphonedetect: debug
+  #  homeassistant.components.mqtt: debug

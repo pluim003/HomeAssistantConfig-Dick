@@ -1,10 +1,12 @@
 # verwarming.yaml
-# v2022.01.07
+# v2023.12.16
 #
 # History:
 #
 # v2022.01.02 - Initial version
 # v2022.01.07 - Minor changes in heating on/off
+# v2023.03.03 - Changed some temperaturesettings, half degree lower
+# v2023.12.16 - Migrated stuff to the GUI
 #
 # This file contains automations for the heating
 #
@@ -28,47 +30,6 @@
 
 # verwarming
 
-- id: verwarming_aan_ochtend_werkdag
-  alias: Verwarming aan op werkdag
-  trigger:
-  - platform: time
-    at: '07:30'
-  condition: 
-  - condition: time
-    weekday:
-    - mon
-    - tue
-    - wed
-    - thu
-    - fri
-  - condition: state
-    entity_id: group.familie
-    state: home
-  action:
-    service: climate.set_temperature
-    entity_id: climate.thermostaat
-    data:
-      temperature: 19.5
-- id: verwarming_aan_ochtend_weekend
-  alias: Verwarming aan in het weekend
-  trigger:
-  - platform: time
-    at: '08:30'
-  condition:
-  - condition: time
-    weekday:
-    - sat
-    - sun
-  - condition: state
-    entity_id: group.familie
-    state: home
-  action:
-  - service: climate.set_temperature
-    data:
-      temperature: 19.5
-    target:
-      entity_id: climate.thermostaat
-
 - id: verwarming_aan_avond
   alias: Verwarming aan in de avond
   trigger:
@@ -81,7 +42,7 @@
   action:
   - service: climate.set_temperature
     data:
-      temperature: 20.5
+      temperature: 20
     target:
       entity_id: climate.thermostaat
 
@@ -102,7 +63,7 @@
     service: climate.set_temperature
     entity_id: climate.thermostaat
     data:
-      temperature: 19
+      temperature: 18.5
 - id: verwarming_uit_avond_weekend
   alias: Verwarming uit in weekend
   trigger:
@@ -117,7 +78,7 @@
     service: climate.set_temperature
     entity_id: climate.thermostaat
     data:
-      temperature: 19
+      temperature: 18.5
 
 - id: verwarming_uit_niemand_thuis
   alias: Verwarming uit als niemand thuis
@@ -131,7 +92,7 @@
   - service: climate.set_temperature
     entity_id: climate.thermostaat
     data: 
-      temperature: 19
+      temperature: 18.5
       # temperature: "{{ (state_attr('sensor.thermostaat_current_temperature', 'thermostaat_current_temperature')|float - 1) }}"
 
 - id: verwarming_aan_als_iemand_thuis_overdag
@@ -149,7 +110,7 @@
     service: climate.set_temperature
     entity_id: climate.thermostaat
     data:
-      temperature: 19.5
+      temperature: 19
 
 - id: verwarming_aan_als_iemand_thuis_avond
   alias: Verwarming aan als iemand thuis avond
@@ -166,5 +127,5 @@
     service: climate.set_temperature
     entity_id: climate.thermostaat
     data:
-      temperature: 20.5
+      temperature: 20
 

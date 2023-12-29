@@ -1,0 +1,45 @@
+
+# Example configuration.yaml entry
+  sensor:
+    - name: "Slaapkamer Dick temperatuur"
+      state_topic: rtl_433/bresser/215/temperature_C
+      unique_id: slaapkamer_dick_temperatuur
+      unit_of_measurement: "°C"
+      value_template: "{{ value | float }}"
+      device_class: temperature
+
+    - name: "Slaapkamer Dick luchtvochtigheid"
+      state_topic: rtl_433/bresser/215/humidity
+      unique_id: slaapkamer_dick_luchtvochtigheid
+      unit_of_measurement: "%"
+      value_template: "{{ value | int }}"
+      device_class: humidity
+
+    - name: "Tuin temperatuur"
+      state_topic: rtl_433/bresser/242/temperature_C
+      unique_id: tuin_temperatuur
+      unit_of_measurement: "°C"
+      value_template: "{{ value | float }}"
+      device_class: temperature
+
+    - name: "Tuin luchtvochtigheid"
+      state_topic: rtl_433/bresser/242/humidity
+      unique_id: tuin_luchtvochtigheid
+      unit_of_measurement: "%"
+      value_template: "{{ value | int }}"
+      device_class: humidity
+   
+    - name: "Werkkamer temperatuur"
+      state_topic: rtl_433/bresser/116/temperature_C
+      unique_id: werkkamer_temperatuur
+      unit_of_measurement: "°C"
+      value_template: "{{ value | float }}" 
+      device_class: temperature
+
+    - name: "Werkkamer luchtvochtigheid" 
+      state_topic: rtl_433/bresser/116/humidity
+      unique_id: werkkamer_luchtvochtigheid
+      unit_of_measurement: "%" 
+      value_template: "{{ value | int }}"
+      device_class: humidity
+

@@ -1,5 +1,5 @@
 # configuration.yaml
-# v2022.01.10
+# v2023.12.20
 #
 # History:
 #
@@ -9,11 +9,15 @@
 #               Changed layout
 #               Added O365-integration
 # v2022.01.04 - Tried to get ssl working without success yet
-# v2002.01.05 - Finally ssl working
-# v2002.01.06 - Using logger.yaml now
+# v2022.01.05 - Finally ssl working
+# v2022.01.06 - Using logger.yaml now
 #               Re-added automations.yaml, next to the automations-dir
-# v2002.01.08 - Added template.yaml
-# v2002.01.10 - Added influx.yaml
+# v2022.01.08 - Added template.yaml
+# v2022.01.10 - Added influx.yaml
+# v2022.08.19 - Removed Lyric, Spotify, Google Calendar and O365 
+# v2022.12.12 - Added countrycode (after upgrade to 2022.12.4)
+# v2023.06.16 - Removed camera.yaml, added command_line.yaml
+# v2023.10.20 - Added allow_external_dir
 #
 # Configure a default setup of Home Assistant (frontend, api, etc)
 #
@@ -32,60 +36,65 @@ scene: !include scenes.yaml
 logger: !include logger.yaml
 notify: !include notify.yaml
 proximity: !include proximity.yaml
-camera: !include camera.yaml
+# camera: !include camera.yaml
 device_tracker: !include device_track.yaml
 input_select: !include input_select.yaml
 sensor: !include sensor.yaml
 binary_sensor: !include binary_sensor.yaml
 template: !include template.yaml
+command_line: !include command_line.yaml
 # resources: !include resources.yaml
 # switch: !include switches.yaml
 # service: !include services.yaml
-# recorder: !include recorder.yaml
+recorder: !include recorder.yaml
 influxdb: !include influxdb.yaml
+mqtt: !include mqtt.yaml
 
 
 homeassistant:
+  country: NL
   internal_url: !secret http_internal_url
   external_url: !secret http_external_url
   allowlist_external_urls:
     - !secret http_allowlist_ext_url1
     - !secret http_allowlist_ext_url2
+  allowlist_external_dirs:
+    - /config
   customize: !include customize.yaml
 
 # API's
 
-lyric:
-  client_id: !secret lyric_client_id
-  client_secret: !secret lyric_client_secret
+#lyric:
+#  client_id: !secret lyric_client_id
+#  client_secret: !secret lyric_client_secret
 
-spotify:
-  client_id: !secret spotify_client_id
-  client_secret: !secret spotify_client_secret
+#spotify:
+#  client_id: !secret spotify_client_id
+#  client_secret: !secret spotify_client_secret
 
-google:
-  client_id: !secret google_client_id
-  client_secret: !secret google_client_secret
+#google:
+#  client_id: !secret google_client_id
+#  client_secret: !secret google_client_secret
 
-o365:
-  client_id: !secret o365_client_id
-  client_secret: !secret o365_client_secret
-  alt_auth_flow: true
-  email_sensor:
-    - name: inbox
-      max_items: 2
-      is_unread: True
-  query_sensors:
-    - name: "HA Notifications"
-      folder: "Inbox/Test_Inbox"
-      from: "mail@example.com"
-      subject_contains: "Notifcation from home assistant"
-      has_attachment: True
-      max_items: 2
-      is_unread: True
+#o365:
+#  client_id: !secret o365_client_id
+#  client_secret: !secret o365_client_secret
+#  alt_auth_flow: true
+#  email_sensor:
+#    - name: inbox
+#      max_items: 2
+#      is_unread: True
+#  query_sensors:
+#    - name: "HA Notifications"
+#      folder: "Inbox/Test_Inbox"
+#      from: "mail@example.com"
+#      subject_contains: "Notifcation from home assistant"
+#      has_attachment: True
+#      max_items: 2
+#      is_unread: True
 
 # custom_components
 
-localtuya: !include localtuya.yaml
+# localtuya: !include localtuya.yaml
 
 http: !include http.yaml

@@ -4,10 +4,12 @@
 # History:
 #
 # v2022.01.02 - Initial version
+# v2023.06.16 - Removed Workday
 #
 # This file contains the binary sensors
 #
-  - platform: workday
-    country: NL
-    workdays: [mon, tue, wed, thu, fri]
-    excludes: [sat, sun, holiday]
+  #- platform: workday
+    #country: NL
+    #workdays: [mon, tue, wed, thu, fri]
+    #excludes: [sat, sun, holiday]
+

@@ -1,5 +1,5 @@
 # automations.yaml
-# v2022.01.17
+# v2023.12.16
 #
 # History:
 #
@@ -10,49 +10,12 @@
 # v2022.01.11 - Added automation to get an alarm when phone and iPad are almost 
 #               charged 
 # v2022.01.17 - Notify-entries changed as no notifications where getting through
+# v2022.05.30 - Modified mobile-app-service
+# v2023.10.25 - Replaced Samsung A72 with iPhone
+# v2023.12.16 - Removed some stuff and migrated some stuff to the GUI
 #
 # This file contains my automations
 #
-
-# afvalwijzer
-
-- id: afval_meldingen
-  alias: "Afval meldingen"
-  mode: single
-  max_exceeded: silent
-  trigger:
-    - platform: time
-      at:
-        - "07:00:00"
-      id: "Vandaag_today"
-    - platform: time
-      at:
-        - "17:00:00"
-      id: "Morgen_tomorrow"
-    - platform: time
-      at:
-        - "20:00:00"
-      id: "Morgen_tomorrow"
-  variables:
-    sensor: "sensor.afvalwijzer_{{ trigger.id.split('_')[1] }}"
-  condition:
-    - alias: "Notification needed?"
-      condition: template
-      value_template: "{{ states(sensor) != 'Geen' }}"
-  action:
-    - alias: "Notification phones"
-      service: notify.mobile_app_sm_a725f
-      data:
-        title: "Denk aan de {{ states(sensor) }} container"
-        message: "{{ trigger.id.split('_')[0] }} moet {{ states(sensor) }} naar buiten"
-        data:
-          channel: Trash
-          ttl: 0
-          priority: high
-          actions:
-            - action: MARK_TRASH_MOVED
-              title: Afval verwerkt
-              icon: sfsymbols:trash.circle
 
 - id: '300m_van_huis'
   alias: Iemand is 300m van huis en op weg naar huis
@@ -68,56 +31,8 @@
     - condition: template
       value_template: '{{ trigger.to_state.attributes.dir_of_travel  == "towards" }}'
   action:
-  - service: notify.mobile_app_sm_a725f
+  - service: notify.mobile_app_dick_iphone
     data_template:
       message: "{{trigger.to_state.object_id[:-5] | capitalize}} is 300m van huis!"
-
-# notify
-
-- alias: Stuur bericht
-  id: stuur_bericht
-  trigger:
-  - entity_id: device_tracker.telefoon_dick
-    from: 'home'
-    platform: state
-    to: 'not_home'
-  action:
-
-  - data:
-      entity_id: media_player.slaapkamer_i_en_d
-      message: Het lijkt erop dat Dick afwezig is!
-    service: tts.google_translate_say
-
-# batterij bijna vol
-
-- id: 'telefoon_dick_bijna_opgeladen'
-  alias: Telefoon Dick bijna opgeladen
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: sensor.sm_a725f_battery_level
-    from: '94'
-    to: '95'
-  condition: []
-  action:
-  - service: notify.mobile_app_sm_a725f
-    data:
-      message: Telefoon bijna opgeladen
-  mode: single
-
-- id: 'Ipad_dick_bijna_opgeladen'
-  alias: Ipad Dick bijna opgeladen
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: sensor.ipad_van_dick_battery_level
-    from: '94'
-    to: '95'
-  condition: []
-  action:
-  - service: notify.mobile_app_sm_a725f
-    data:
-      message: Ipad bijna opgeladen
-  mode: single
 
 

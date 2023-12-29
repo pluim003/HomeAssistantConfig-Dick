@@ -1,5 +1,5 @@
 # sensor.yaml
-# v2022.01.19
+# v2023.06.16
 #
 # History:
 #
@@ -11,13 +11,12 @@
 # v2022.01.08 - Modified layout 
 #               Moved template-sensors to template.yaml
 # v2022.01.19 - Modified afvalwijzer-sensor due to new release of that add-on
+# v2022.05.03 - Added brandstofprijzen
+# v2022.06.10 - Added sensor to get rid of spikes in 'actueel stroom verbruik'
+# v2023.01.09 - Added sensor for prijsplafond
+# v2023.06.16 - Moved rpi4_cpu_temperature to command_line.yaml
+# v2023.12.20 - Removed sensor for prijsplafond
 #
-
-  - platform: command_line
-    name: rpi4_cpu_temperatuur
-    command: "cat /sys/class/thermal/thermal_zone0/temp"
-    unit_of_measurement: "°C"
-    value_template: "{{ value | multiply(0.001) | round(1) }}"
 
   - platform: systemmonitor
     resources:
@@ -49,3 +48,26 @@
       status_emilie:
         value_template: '{{ states.input_select.status_emilie_dropdown.state }}'
         friendly_name: 'Emilie'
+
+  - platform: brandstofprijzen
+    monitored_variables:
+      - euro95
+      - diesel
+      - lpg
+      - super
+      - super_mlv
+      - premium_benzines
+      - premium_diesels
+    icon: mdi:gas-station
+    unit_of_measurement: €/L
+    prefix: Adviesprijs
+    scan_interval:
+        hours: 1
+
+  - platform: filter                                                                                                 
+    name: "Actueel stroom verbruik gefilterd"                                                                        
+    entity_id: sensor.actueel_stroom_verbruik                                                                    
+    filters:                                                                                                         
+      - filter: time_simple_moving_average                                                                             
+        window_size: "00:00:30"                                                                                        
+

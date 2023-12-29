@@ -1,17 +1,23 @@
 # influxdb.yaml
-# v2022.01.10
+# v2022.12.11
 #
 # History:
 #
 # v2022.01.10 - Initial version
+# v2022.12.11 - Upgraded to InfluxDB v2.x
 #
 # This file contains the information to record data
 #
-
+  api_version: 2
   host: !secret influx_host
   port: !secret influx_port
-  database: !secret influx_db
-  username: !secret influx_user
-  password: !secret influx_pw
+#  database: !secret influx_db
+#  username: !secret influx_user
+#  password: !secret influx_pw
+  token: !secret influx_token
   max_retries: 3
+  ssl: false
+  verify_ssl: false
   default_measurement: state
+  organization: my-org
+  bucket: homeassistant

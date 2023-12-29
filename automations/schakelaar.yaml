@@ -1,5 +1,5 @@
 # schakelaar.yaml
-# v2022.01.09
+# v2023.12.16
 #
 # History:
 #
@@ -7,36 +7,10 @@
 # v2022.01.07 - Delay of 5 minutes before turning off switch when no-one is
 #               at home
 # v2022.01.09 - Moved switches from original automations.yaml to this file
+# v2023.12.16 - Migrated automations to the GUI
 #
 # This file contains automations for switches
 #
-
-# schakelaar uit als niemand thuis en weer aan als iemand thuis komt
-
-- id: Schakelaar_AV-apparatuur_uit_als_niemand_thuis
-  alias: Schakelaar AV-apparatuur uit als niemand thuis
-  trigger:
-  - platform: state
-    entity_id: group.familie
-    to: 'not_home'
-    for: 
-      minutes: 5
-  condition:
-  action:
-    service: switch.turn_off
-    entity_id: switch.schakelaar_av_apparatuur
-
-- id: Schakelaar_AV-apparatuur_aan_als_iemand_thuis
-  alias: Schakelaar AV-apparatuur aan als iemand thuis
-  trigger:
-  - platform: state
-    entity_id: group.familie
-    from: 'not_home'
-    to: 'home'
-  condition:
-  action:
-    service: switch.turn_on
-    entity_id: switch.schakelaar_av_apparatuur
 
 # Christmastree-switch
 

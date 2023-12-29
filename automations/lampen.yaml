@@ -1,5 +1,5 @@
 # lampen.yaml
-# v2022.01.11
+# v2022.03.23
 #
 # History:
 #
@@ -18,6 +18,7 @@
 #               day off
 # v2022.01.11 - Some automations don't need to run on Thursdays and a few
 #               times on Tuedays
+# v2022.03.23 - Added automations for lamp frontdoor
 #
 # This file contains automations for lights
 #
@@ -90,3 +91,52 @@
   action:
     service: light.turn_on
     entity_id: light.lamp_michel    
+
+# lamp voordeur
+
+- id: lamp_voordeur_uit_na_zonsopkomst
+  alias: Lamp voordeur uit na zonsopkomst
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: -00:30:00
+  action:
+    service: light.turn_off
+    entity_id: light.buitenlamp_voordeur
+
+- id: lamp_voordeur_aan_bij_zonsondergang
+  alias: Lamp voordeur aan bij zonsondergang
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: +00:30:00
+  action:
+    service: light.turn_on
+    entity_id: light.buitenlamp_voordeur
+
+# lamp woonkamer
+
+- id: lamp_woonkamer_aan_voor_werk
+  alias: Lamp woonkamer aan voor werk
+  trigger:
+  - platform: time
+    at: "06:20:00"
+  - platform: numeric_state
+    entity_id: sensor.buienradar_irradiance
+    value_template: "{{ states.sensor.buienradar_irradiance.state | float(0) }}"
+    below: 10
+  condition:
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - thu
+      - fri
+    - condition: state
+      entity_id: light.lamp_woonkamer
+      state: "off"
+  action:
+    service: light.turn_on
+    entity_id: light.lamp_woonkamer
+
+
