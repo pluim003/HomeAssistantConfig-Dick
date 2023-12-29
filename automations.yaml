@@ -1,0 +1,370 @@
+- id: '1702318795989'
+  alias: Lamp woonkamer bij weinig licht
+  description: Zet lamp woonkamer aan als iemand thuis komt en er weinig licht is
+  trigger:
+  - platform: state
+    entity_id:
+    - group.familie
+    from: not_home
+    to: home
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.buienradar_irradiance
+    value_template: '{{ states.sensor.buienradar_irradiance.state | float(0) }}'
+    below: 20
+  action:
+  - type: turn_on
+    device_id: 8ad727d53106abb9f376ac840116127c
+    entity_id: 516d27021a315d46c8506124605c65e3
+    domain: light
+  mode: single
+- id: '1702356991153'
+  alias: Lamp woonkamer uit als niemand thuis
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - group.familie
+    from: home
+    to: not_home
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 8ad727d53106abb9f376ac840116127c
+    entity_id: 516d27021a315d46c8506124605c65e3
+    domain: light
+  mode: single
+- id: '1702454683861'
+  alias: Lamp woonkamer uit als familie aanwezig
+  description: Lamp woonkamer kan weer uit als familie terugkeerde en het te donker
+    was. Inmiddels zal er wel een andere lamp aan zijn. :-)
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 8ad727d53106abb9f376ac840116127c
+    entity_id: 516d27021a315d46c8506124605c65e3
+    domain: light
+    for:
+      hours: 0
+      minutes: 22
+      seconds: 0
+  condition:
+  - condition: state
+    entity_id: group.familie
+    state: home
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  action:
+  - type: turn_off
+    device_id: 8ad727d53106abb9f376ac840116127c
+    entity_id: 516d27021a315d46c8506124605c65e3
+    domain: light
+  mode: single
+- id: '1702716930715'
+  alias: Rook in de schuur
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.rookmelder_schuur_hoeveelheid_rook
+    above: 0
+  condition: []
+  action:
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    data:
+      message: Er is rook gedetecteerd in de schuur
+      title: Rook in de schuur
+      data: sensor.rookmelder_schuur_hoeveelheid_rook
+  mode: single
+- id: '1702717029691'
+  alias: Koolmonoxide gedetecteerd in washok
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.koolmonoxidemelder_veiligheid
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    data:
+      message: Koolmonoxide gedetecteerd in washok
+      title: Koolmonoxide gedetecteerd in washok
+  mode: single
+- id: '1702717156497'
+  alias: Verwarming aan in het weekend
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:30
+  condition:
+  - condition: time
+    weekday:
+    - sat
+    - sun
+  - condition: state
+    entity_id: group.familie
+    state: home
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: 19
+    target:
+      entity_id: climate.thermostaat
+  mode: single
+- id: '1702717190088'
+  alias: Verwarming aan op werkdag
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:30
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  - condition: state
+    entity_id: group.familie
+    state: home
+  action:
+  - service: climate.set_temperature
+    entity_id: climate.thermostaat
+    data:
+      temperature: 19
+  mode: single
+- id: '1702717425031'
+  alias: Schakelaar AV-apparatuur uit als niemand thuis
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.familie
+    to: not_home
+    for:
+      minutes: 5
+  condition:
+  action:
+  - service: switch.turn_off
+    entity_id: switch.schakelaar_av_apparatuur
+  mode: single
+- id: '1702717458848'
+  alias: Schakelaar AV-apparatuur aan als iemand thuis
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.familie
+    from: not_home
+    to: home
+  condition:
+  action:
+  - service: switch.turn_on
+    entity_id: switch.schakelaar_av_apparatuur
+  mode: single
+- id: '1702717827603'
+  alias: Telefoon Dick bijna opgeladen
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.dicks_iphone_14_pm_battery_level
+    from: '94'
+    to: '95'
+  condition: []
+  action:
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    data:
+      message: Batterij iPhne Dick bijna vol
+  mode: single
+- id: '1702717900856'
+  alias: Ipad Dick bijna opgeladen
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.ipad_van_dick_battery_level
+    from: '94'
+    to: '95'
+  condition: []
+  action:
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    data:
+      message: iPad Dick bijna opgeladen
+  mode: single
+- id: '1702717937329'
+  alias: Afval meldingen
+  description: ''
+  trigger:
+  - platform: time
+    at:
+    - 07:45:00
+    id: Vandaag_today
+  - platform: time
+    at:
+    - '17:00:00'
+    id: Morgen_tomorrow
+  - platform: time
+    at:
+    - '20:00:00'
+    id: Morgen_tomorrow
+  condition:
+  - alias: Notification needed?
+    condition: template
+    value_template: '{{ states(sensor) != ''Geen'' }}'
+  action:
+  - alias: Notification phones
+    service: notify.mobile_app_dicks_iphone_14_pm
+    data:
+      title: Denk aan de {{ states(sensor) }} container
+      message: '{{ trigger.id.split(''_'')[0] }} moet {{ states(sensor) }} naar buiten'
+      data:
+        channel: Trash
+        ttl: 0
+        priority: high
+        actions:
+        - action: MARK_TRASH_MOVED
+          title: Afval verwerkt
+          icon: sfsymbols:trash.circle
+  mode: single
+  max_exceeded: silent
+  variables:
+    sensor: sensor.afvalwijzer_{{ trigger.id.split('_')[1] }}
+- id: '1702887207212'
+  alias: iPhone Dick bijna opgeladen
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.dicks_iphone_14_pm_battery_level
+    from: '94'
+    to: '95'
+  condition: []
+  action:
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    data:
+      message: iPad Dick bijna opgeladen
+  mode: single
+- id: '1703160070212'
+  alias: Purge database
+  description: ''
+  trigger:
+  - platform: time
+    at: 03:03:00
+  condition: []
+  action:
+  - service: recorder.purge_entities
+    data:
+      entity_globs: sensor.buienradar* sensor.fritz* button.* light.*
+      keep_days: 14
+  mode: single
+- id: '1703769617583'
+  alias: Lamp werkkamer aan op vrijdag
+  description: ''
+  trigger:
+  - platform: time
+    at: 07:22:00
+  - platform: numeric_state
+    entity_id: sensor.buienradar_irradiance
+    value_template: '{{ states.sensor.buienradar_irradiance.state | float(0) }}'
+    below: 10
+  condition:
+  - condition: time
+    weekday:
+    - fri
+  - condition: state
+    entity_id: light.lamp_werkkamer
+    state: 'off'
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      device_id: 5ff71e054a09bc6eb13a83f806166252
+  mode: single
+- id: '1703769667924'
+  alias: Lamp werkkamer uit als buiten licht genoeg
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.buienradar_irradiance
+    value_template: '{{ states.sensor.buienradar_irradiance.state | float(0) }}'
+    above: 12
+  condition:
+  - condition: time
+    weekday:
+    - fri
+  - condition: state
+    entity_id: light.lamp_werkkamer
+    state: 'on'
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      device_id: 5ff71e054a09bc6eb13a83f806166252
+  mode: single
+- id: '1703769748912'
+  alias: Lamp werkkamer aan als buiten te donker
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.buienradar_irradiance
+    value_template: '{{ states.sensor.buienradar_irradiance.state | float(0) }}'
+    below: 12
+  condition:
+  - condition: time
+    weekday:
+    - fri
+  - condition: time
+    before: '17:00:00'
+  - condition: device
+    type: is_off
+    device_id: 5ff71e054a09bc6eb13a83f806166252
+    entity_id: 5f28bbce34e3fe0c6167467da173be15
+    domain: light
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id:
+      - light.lamp_werkkamer
+  mode: single
+- id: '1703796513529'
+  alias: Plug woonkamer uit als er geen activiteit is
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.plug_woonkamer_apparatuur_vermogen
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+    below: 20
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 1adc2f4f30cc1c3788d3f35e46e2c2bc
+    entity_id: 276d4b8d1dcfc562d5f9b799b858e66e
+    domain: switch
+  mode: single
+- id: '1703796619692'
+  alias: Plug werkkamer uit bij geen activiteit
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.plug_werkkamer_vermogen
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+    below: 30
+  condition: []
+  action:
+  - type: turn_off
+    device_id: b1afc181b68a97e323db444f4597d846
+    entity_id: bbf8e3c3e64e4e4f550d9d38161ed35a
+    domain: switch
+  mode: single
