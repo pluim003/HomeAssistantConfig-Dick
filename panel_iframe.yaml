@@ -1,0 +1,4 @@
+configurator:
+  title: Configurator
+  icon: mdi:wrench
+  url: https://172.40.0.4:3218

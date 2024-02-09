@@ -16,14 +16,14 @@
       device_class: humidity
 
     - name: "Tuin temperatuur"
-      state_topic: rtl_433/bresser/242/temperature_C
+      state_topic: rtl_433/bresser/138/temperature_C
       unique_id: tuin_temperatuur
       unit_of_measurement: "°C"
       value_template: "{{ value | float }}"
       device_class: temperature
 
     - name: "Tuin luchtvochtigheid"
-      state_topic: rtl_433/bresser/242/humidity
+      state_topic: rtl_433/bresser/138/humidity
       unique_id: tuin_luchtvochtigheid
       unit_of_measurement: "%"
       value_template: "{{ value | int }}"
@@ -42,4 +42,13 @@
       unit_of_measurement: "%" 
       value_template: "{{ value | int }}"
       device_class: humidity
+
+# laptop-gegevens
+ 
+    - name: "Laptop Dick batterijpercentage"
+      state_topic: homeassistant/sensor/LAPTOP-DICK/LAPTOP-DICK_batterij/LAPTOP-DICK_batterij_charge_remaining_percentage/state
+      unique_id: Laptop_Dick_batterij_percentage
+      unit_of_measurement: "%"
+      value_template: "{{ value | float }}"
+      device_class: battery
 

@@ -1,5 +1,5 @@
 # automations.yaml
-# v2023.12.16
+# v2024.02.09
 #
 # History:
 #
@@ -13,26 +13,9 @@
 # v2022.05.30 - Modified mobile-app-service
 # v2023.10.25 - Replaced Samsung A72 with iPhone
 # v2023.12.16 - Removed some stuff and migrated some stuff to the GUI
+# v2024.02.09 - Removed automation which uses proximity, which makes this file empty now.
 #
 # This file contains my automations
 #
-
-- id: '300m_van_huis'
-  alias: Iemand is 300m van huis en op weg naar huis
-  mode: single
-  trigger:
-  - platform: numeric_state
-    entity_id:
-      - proximity.dick_thuis
-    below: 300
-  condition:
-  - condition: and
-    conditions:
-    - condition: template
-      value_template: '{{ trigger.to_state.attributes.dir_of_travel  == "towards" }}'
-  action:
-  - service: notify.mobile_app_dick_iphone
-    data_template:
-      message: "{{trigger.to_state.object_id[:-5] | capitalize}} is 300m van huis!"
 
 

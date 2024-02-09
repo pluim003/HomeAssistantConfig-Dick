@@ -1,5 +1,5 @@
 # recorder.yaml
-# v2023.12.28
+# v2023.12.29
 #
 # History:
 #
@@ -9,14 +9,15 @@
 # v2023.12.20 - Added some excludes
 # v2023.12.22 - Removed some excludes
 # v2023.12.28 - Added include sensor.buienradar_irradiance
+# v2023.12.29 - Removed device_tracker from exclude
 #
 # This file contains the information to record data
 #
 #  db_url: !secret mariadb_url
 
   exclude:
-    domains: 
-      - device_tracker
+#    domains: 
+      #- device_tracker
     entity_globs:
       - sensor.actueel_stroom*
       - sensor.elzenlaan*

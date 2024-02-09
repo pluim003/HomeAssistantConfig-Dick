@@ -134,12 +134,13 @@
     state: home
   action:
   - service: climate.set_temperature
-    entity_id: climate.thermostaat
     data:
-      temperature: 19
+      temperature: 18.5
+    target:
+      entity_id: climate.thermostaat
   mode: single
 - id: '1702717425031'
-  alias: Schakelaar AV-apparatuur uit als niemand thuis
+  alias: Plug AV-apparatuur uit als niemand thuis
   description: ''
   trigger:
   - platform: state
@@ -153,7 +154,7 @@
     entity_id: switch.schakelaar_av_apparatuur
   mode: single
 - id: '1702717458848'
-  alias: Schakelaar AV-apparatuur aan als iemand thuis
+  alias: Plug AV-apparatuur aan als iemand thuis
   description: ''
   trigger:
   - platform: state
@@ -261,27 +262,26 @@
       keep_days: 14
   mode: single
 - id: '1703769617583'
-  alias: Lamp werkkamer aan op vrijdag
+  alias: Lamp werkkamer aan bij beweging
   description: ''
   trigger:
-  - platform: time
-    at: 07:22:00
-  - platform: numeric_state
-    entity_id: sensor.buienradar_irradiance
-    value_template: '{{ states.sensor.buienradar_irradiance.state | float(0) }}'
-    below: 10
+  - type: motion
+    platform: device
+    device_id: 1d8ecd6d6cd2c63681b72206bec5802a
+    entity_id: f3e04c6ad621f5f7af36631c6275ebd7
+    domain: binary_sensor
   condition:
-  - condition: time
-    weekday:
-    - fri
   - condition: state
     entity_id: light.lamp_werkkamer
     state: 'off'
+  - condition: numeric_state
+    entity_id: sensor.buienradar_irradiance
+    below: 12
   action:
   - service: light.turn_on
     data: {}
     target:
-      device_id: 5ff71e054a09bc6eb13a83f806166252
+      device_id: 3cf12c7a76df80b2aeffb6fb78ccf12b
   mode: single
 - id: '1703769667924'
   alias: Lamp werkkamer uit als buiten licht genoeg
@@ -292,9 +292,6 @@
     value_template: '{{ states.sensor.buienradar_irradiance.state | float(0) }}'
     above: 12
   condition:
-  - condition: time
-    weekday:
-    - fri
   - condition: state
     entity_id: light.lamp_werkkamer
     state: 'on'
@@ -302,27 +299,34 @@
   - service: light.turn_off
     data: {}
     target:
-      device_id: 5ff71e054a09bc6eb13a83f806166252
+      device_id: 3cf12c7a76df80b2aeffb6fb78ccf12b
   mode: single
 - id: '1703769748912'
   alias: Lamp werkkamer aan als buiten te donker
   description: ''
   trigger:
   - platform: numeric_state
-    entity_id: sensor.buienradar_irradiance
+    entity_id:
+    - sensor.buienradar_irradiance
     value_template: '{{ states.sensor.buienradar_irradiance.state | float(0) }}'
     below: 12
   condition:
   - condition: time
     weekday:
     - fri
+    enabled: false
   - condition: time
     before: '17:00:00'
   - condition: device
     type: is_off
-    device_id: 5ff71e054a09bc6eb13a83f806166252
-    entity_id: 5f28bbce34e3fe0c6167467da173be15
+    device_id: 3cf12c7a76df80b2aeffb6fb78ccf12b
+    entity_id: ca0c051514f84f4149df1a5015face3d
     domain: light
+  - condition: device
+    type: is_on
+    device_id: b1afc181b68a97e323db444f4597d846
+    entity_id: bbf8e3c3e64e4e4f550d9d38161ed35a
+    domain: switch
   action:
   - service: light.turn_on
     data: {}
@@ -367,4 +371,298 @@
     device_id: b1afc181b68a97e323db444f4597d846
     entity_id: bbf8e3c3e64e4e4f550d9d38161ed35a
     domain: switch
+  mode: single
+- id: '1703862628084'
+  alias: Lamp werkkamer uit als er weinig activiteit is
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 3cf12c7a76df80b2aeffb6fb78ccf12b
+    entity_id: ca0c051514f84f4149df1a5015face3d
+    domain: light
+  condition:
+  - condition: numeric_state
+    entity_id: sensor.plug_werkkamer_vermogen
+    below: 30
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      device_id:
+      - 5ff71e054a09bc6eb13a83f806166252
+      - 8ad727d53106abb9f376ac840116127c
+  mode: single
+- id: '1704015390920'
+  alias: Melding wasmachine gereed
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.plug_wasmachine_vermogen
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+    below: 1
+  condition: []
+  action:
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    data:
+      message: Was is gereed
+  mode: single
+- id: '1704018815195'
+  alias: Plug werkkamer aan als accu laptop bijna leeg is
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.laptop_dick_batterijpercentage
+    below: 25
+  condition: []
+  action:
+  - type: turn_on
+    device_id: b1afc181b68a97e323db444f4597d846
+    entity_id: bbf8e3c3e64e4e4f550d9d38161ed35a
+    domain: switch
+  mode: single
+- id: '1704033868674'
+  alias: Melding vaatwasser gereed
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.plug_vaatwasser_vermogen
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+    below: 6
+  condition: []
+  action:
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    data:
+      message: Vaatwasser is gereed
+  mode: single
+- id: '1704297141493'
+  alias: Lamp werkkamer uit bij geen beweging
+  description: ''
+  trigger:
+  - type: no_motion
+    platform: device
+    device_id: 1d8ecd6d6cd2c63681b72206bec5802a
+    entity_id: f3e04c6ad621f5f7af36631c6275ebd7
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 3
+      seconds: 0
+  condition:
+  - condition: state
+    entity_id: light.lamp_werkkamer
+    state: 'on'
+  action:
+  - service: light.turn_off
+    target:
+      entity_id: []
+      device_id:
+      - 3cf12c7a76df80b2aeffb6fb78ccf12b
+      area_id: []
+    data: {}
+  mode: single
+- id: '1705216542367'
+  alias: Verwarming aan in de avond
+  description: ''
+  trigger:
+  - platform: time
+    at: '18:00'
+  condition:
+  - condition: state
+    entity_id: group.familie
+    state: home
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: 19.5
+    target:
+      entity_id: climate.thermostaat
+  mode: single
+- id: '1705216795669'
+  alias: Verwarming aan in de avond als Emilie thuis is
+  description: ''
+  trigger:
+  - platform: time
+    at: '18:00'
+  condition:
+  - condition: state
+    entity_id: group.familie
+    state: home
+  - condition: state
+    entity_id: person.emilie_pluim
+    state: home
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: 20
+    target:
+      entity_id: climate.thermostaat
+  mode: single
+- id: '1705577740904'
+  alias: Verwarming uit op werkdag
+  description: ''
+  trigger:
+  - platform: time
+    at: '22:00'
+  condition:
+  - condition: time
+    weekday:
+    - sun
+    - mon
+    - tue
+    - wed
+    - thu
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: 18
+    target:
+      entity_id: climate.thermostaat
+  mode: single
+- id: '1705577779941'
+  alias: Verwarming uit in weekend
+  description: ''
+  trigger:
+  - platform: time
+    at: '22:30'
+  condition:
+  - condition: time
+    weekday:
+    - fri
+    - sat
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: 18
+    target:
+      entity_id: climate.thermostaat
+  mode: single
+- id: '1705577815078'
+  alias: Verwarming uit als niemand thuis
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.familie
+    from: home
+    to: not_home
+  condition:
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: 18
+    target:
+      entity_id: climate.thermostaat
+  mode: single
+- id: '1705596084966'
+  alias: Kerstverlichting overkapping aan
+  description: ''
+  trigger:
+  - platform: time
+    at: 06:45:00
+  condition: []
+  action:
+  - service: switch.turn_on
+    data: {}
+    target:
+      device_id: fbb19895d1ebfff19f07588ec33954bd
+  mode: single
+- id: '1705596251803'
+  alias: Kerstverlichting aan bij zonsondergang
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: +00:30:00
+  condition: []
+  action:
+  - service: switch.turn_on
+    data: {}
+    target:
+      device_id: fbb19895d1ebfff19f07588ec33954bd
+  mode: single
+- id: '1705596388141'
+  alias: Kerstverlichting overkapping uit na zonsopkomst
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: -00:30:00
+  condition: []
+  action:
+  - service: switch.turn_off
+    data: {}
+    target:
+      device_id: fbb19895d1ebfff19f07588ec33954bd
+  mode: single
+- id: '1705596471666'
+  alias: Kerstverlichting overkapping uit
+  description: ''
+  trigger:
+  - platform: time
+    at: '23:00:00'
+  condition: []
+  action:
+  - service: switch.turn_off
+    data: {}
+    target:
+      device_id: fbb19895d1ebfff19f07588ec33954bd
+  mode: single
+- id: '1705992029557'
+  alias: Wasmachine aan bij voldoende zon
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.kwh_meter_zonnepanelen_active_power
+    below: -250
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 0eaff47347d8e86ce73ea73db675198e
+    entity_id: c63e17c8c7ff75b85c3d8a1727276be8
+    domain: switch
+  action:
+  - type: turn_on
+    device_id: 0eaff47347d8e86ce73ea73db675198e
+    entity_id: c63e17c8c7ff75b85c3d8a1727276be8
+    domain: switch
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    metadata: {}
+    data:
+      message: Wasmachine gaat aan
+      title: Wasmachine gaat aan
+  mode: single
+- id: '1706087379533'
+  alias: Vaatwasser aan bij voldoende zon
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.kwh_meter_zonnepanelen_active_power
+    below: -250
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 0bd644fdb9c2b33937b560f64c070356
+    entity_id: 49f29d2ad59ab7a2875866b4b6c158ef
+    domain: switch
+  action:
+  - type: turn_on
+    device_id: 0bd644fdb9c2b33937b560f64c070356
+    entity_id: 49f29d2ad59ab7a2875866b4b6c158ef
+    domain: switch
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    metadata: {}
+    data:
+      message: Vaatwasser gaat aan
+      title: Vaatwasser gaat aan
   mode: single
