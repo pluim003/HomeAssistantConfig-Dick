@@ -1,0 +1,233 @@
+# aanwezigheid.yaml
+# v2022.05.30
+#
+# History:
+#
+# v2022.01.02 - Initial version
+# v2022.01.03 - Added comment
+# v2022.01.13 - Renamed devices
+#               Added notification when someone is at home or nobody is at home
+# v2022.05.30 - Modified notifications to mobile device
+#
+# This file contains automations with respect to presence of family-members
+# This is derived from the automation by Phil Hawthorne: https://philhawthorne.com/making-home-assistants-presence-detection-not-so-binary/
+#
+
+# check aan/afwezigheid
+
+- alias: Markeer persoon als net thuis
+  id: markeer_persoon_als_net_thuis
+  trigger:
+    - platform: state
+      entity_id: 
+        - device_tracker.telefoon_ip1_dick
+        - device_tracker.telefoon_ip2_dick
+      from: 'not_home'
+      to: 'home'
+    - platform: state
+      entity_id: device_tracker.telefoon_ip1_inge
+      from: 'not_home'
+      to: 'home'
+    - platform: state
+      entity_id: device_tracker.telefoon_ip1_michel
+      from: 'not_home'
+      to: 'home'
+    - platform: state
+      entity_id: device_tracker.telefoon_ip1_emilie
+      from: 'not_home'
+      to: 'home'
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'device_tracker.telefoon_ip1_dick' %}
+            input_select.status_dick_dropdown
+          {% elif trigger.entity_id == 'device_tracker.telefoon_ip1_inge' %}
+            input_select.status_inge_dropdown
+          {% elif trigger.entity_id == 'device_tracker.telefoon_ip1_emilie' %}
+            input_select.status_emilie_dropdown
+          {% elif trigger.entity_id == 'device_tracker.telefoon_ip1_michel' %}
+            input_select.status_michel_dropdown
+          {% endif %}
+        option: Net thuis
+
+- alias: Markeer persoon als thuis
+  id: markeer_persoon_als_thuis
+  trigger:
+    - platform: state
+      entity_id: input_select.status_dick_dropdown
+      to: 'Net thuis'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.status_inge_dropdown
+      to: 'Net thuis'
+      for:
+        minutes: 10 
+    - platform: state
+      entity_id: input_select.status_emilie_dropdown
+      to: 'Net thuis'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.status_michel_dropdown
+      to: 'Net thuis'
+      for:
+        minutes: 10
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'input_select.status_dick_dropdown' %}
+            input_select.status_dick_dropdown
+          {% elif trigger.entity_id == 'input_select.status_inge_dropdown' %}
+            input_select.status_inge_dropdown
+          {% elif trigger.entity_id == 'input_select.status_emilie_dropdown' %}
+            input_select.status_emilie_dropdown
+          {% elif trigger.entity_id == 'input_select.status_michel_dropdown' %}
+            input_select.status_michel_dropdown
+          {% endif %}
+        option: Thuis
+
+- alias: Markeer persoon als net weg
+  id: markeer_persoon_als_net_weg
+  trigger:
+    - platform: state
+      entity_id: device_tracker.telefoon_ip1_dick
+      from: 'home'
+      to: 'not_home'
+    - platform: state
+      entity_id: device_tracker.telefoon_ip1_inge
+      from: 'home'
+      to: 'not_home'
+    - platform: state
+      entity_id: device_tracker.telefoon_ip1_emilie
+      from: 'home'
+      to: 'not_home'
+    - platform: state
+      entity_id: device_tracker.telefoon_ip1_michel
+      from: 'home'
+      to: 'not_home'
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'device_tracker.telefoon_ip1_dick' %}
+            input_select.status_dick_dropdown
+          {% elif trigger.entity_id == 'device_tracker.telefoon_ip1_inge' %}
+            input_select.status_inge_dropdown
+          {% elif trigger.entity_id == 'device_tracker.telefoon_ip1_emilie' %}
+            input_select.status_emilie_dropdown
+          {% elif trigger.entity_id == 'device_tracker.telefoon_ip1_michel' %}
+            input_select.status_michel_dropdown
+          {% endif %}
+        option: Net weg
+ 
+- alias: Markeer persoon als afwezig
+  id: markeer_persoon_als_afwezig
+  trigger:
+    - platform: state
+      entity_id: input_select.status_dick_dropdown
+      to: 'Net weg'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.status_inge_dropdown
+      to: 'Net weg'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.status_emilie_dropdown
+      to: 'Net weg'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: input_select.status_michel_dropdown
+      to: 'Net weg'
+      for:
+        minutes: 10
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'input_select.status_dick_dropdown' %}
+            input_select.status_dick_dropdown
+          {% elif trigger.entity_id == 'input_select.status_inge_dropdown' %}
+            input_select.status_inge_dropdown
+          {% elif trigger.entity_id == 'input_select.status_emilie_dropdown' %}
+            input_select.status_emilie_dropdown
+          {% elif trigger.entity_id == 'input_select.status_michel_dropdown' %}
+            input_select.status_michel_dropdown
+          {% endif %}
+        option: Afwezig
+ 
+- alias: Markeer persoon als langdurig afwezig
+  id: markeer_persoon_als_langdurig_afwezig
+  trigger:
+    - platform: state
+      entity_id: input_select.status_dick_dropdown
+      to: 'Afwezig'
+      for:
+        hours: 24
+    - platform: state
+      entity_id: input_select.status_inge_dropdown
+      to: 'Away'
+      for:
+        hours: 24
+    - platform: state
+      entity_id: input_select.status_emilie_dropdown
+      to: 'Afwezig'
+      for:
+        hours: 24
+    - platform: state
+      entity_id: input_select.status_michel_dropdown
+      to: 'Away'
+      for:
+        hours: 24
+  action:
+    - service: input_select.select_option
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'input_select.status_dick_dropdown' %}
+            input_select.status_dick_dropdown
+           {% elif trigger.entity_id == 'input_select.status_inge_dropdown' %}
+            input_select.status_inge_dropdown
+          {% elif trigger.entity_id == 'input_select.status_emilie_dropdown' %}
+            input_select.status_emilie_dropdown
+          {% elif trigger.entity_id == 'input_select.status_michel_dropdown' %}
+            input_select.status_michel_dropdown
+          {% endif %}
+        option: Langdurig afwezig
+
+# melding wanneer iemand of niemand thuis
+
+- id: '1671889877528'
+  alias: Melding iemand thuis
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.familie
+    from: not_home
+    to: home
+  condition: []
+  action:
+  - service: notify.mobile_app_dicksa72
+    data:
+      title: "Iemand thuis"
+      message: "Er is iemand thuis"
+  mode: single
+- id: 'melding_niemand_thuis'
+  alias: Melding niemand thuis
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: group.familie
+    from: home
+    to: not_home
+  condition: []
+  action:
+  - service: notify.mobile_app_dicksa72
+    data:
+      title: "Niemand thuis"
+      message: "Er is niemand thuis"
+  mode: single
