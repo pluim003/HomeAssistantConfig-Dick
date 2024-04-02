@@ -1,5 +1,5 @@
 # template.yaml
-# v2023.12.24
+# v2024.03.07
 #
 # History:
 #
@@ -29,6 +29,7 @@
 # v2023.12.23 - Added sensor for unmonitored energy
 # v2023.12.24 - Small correction in total solar power since installation (it was off by 1,2kWh,
 #               instead of using 1,051 as multiplier changed it to 1,048)
+# v2024.03.07 - Trying to get a better monitoring of unmonitored electricity
 #
 
 # sensors to layout the energy ussage a bit nicer
@@ -72,6 +73,11 @@
       - name: 'Totale stroom verbruik'
         unit_of_measurement : "kWh"
         state: "{{ (states('sensor.p1_meter_total_power_import_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) - states('sensor.p1_meter_total_power_export_t1') |round(1, default=0)  - states('sensor.p1_meter_total_power_export_t2') | round(1, default=0)) | round(1, default=0)  }} "
+        icon: mdi:flash
+  - sensor:
+      - name: 'Totale stroom verbruik plus zon'
+        unit_of_measurement : "kWh"
+        state: "{{ (states('sensor.p1_meter_total_power_import_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) - states('sensor.p1_meter_total_power_export_t1') |round(1, default=0)  - states('sensor.p1_meter_total_power_export_t2') | round(1, default=0)) | round(1, default=0) + states('sensor.kwh_meter_zonnepanelen_total_power_export') }} " 
         icon: mdi:flash
   - sensor:
       - name: 'Actueel stroom verbruik'
@@ -156,7 +162,7 @@
   - sensor:
       - name: Niet gemonitorde electriciteit_nog_niet_werkend
         state: >
-          {{ (states('sensor.totale_stroom_verbruik') | float) -  
+          {{ (states('sensor.totale_stroom_verbruik_met_zon') | float) -  
             (states('sensor.gemonitorde_electriciteit') | float) 
           }}
         device_class: energy

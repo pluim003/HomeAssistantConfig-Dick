@@ -114,6 +114,11 @@
       temperature: 19
     target:
       device_id: 98c3b36b898511c3fea646621ada9808
+  - device_id: 98c3b36b898511c3fea646621ada9808
+    domain: climate
+    entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
+    type: set_hvac_mode
+    hvac_mode: heat
   mode: single
 - id: '1702717190088'
   alias: Verwarming aan op werkdag
@@ -136,8 +141,14 @@
   - service: climate.set_temperature
     data:
       temperature: 18.5
+      hvac_mode: heat_cool
     target:
       device_id: 98c3b36b898511c3fea646621ada9808
+  - device_id: 98c3b36b898511c3fea646621ada9808
+    domain: climate
+    entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
+    type: set_hvac_mode
+    hvac_mode: heat
   mode: single
 - id: '1702717425031'
   alias: Plug AV-apparatuur uit als niemand thuis
@@ -486,6 +497,11 @@
       temperature: 19
     target:
       device_id: 98c3b36b898511c3fea646621ada9808
+  - device_id: 98c3b36b898511c3fea646621ada9808
+    domain: climate
+    entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
+    type: set_hvac_mode
+    hvac_mode: heat
   mode: single
 - id: '1705216795669'
   alias: Verwarming aan in de avond als Emilie thuis is
@@ -506,6 +522,11 @@
       temperature: 19.5
     target:
       device_id: 98c3b36b898511c3fea646621ada9808
+  - device_id: 98c3b36b898511c3fea646621ada9808
+    domain: climate
+    entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
+    type: set_hvac_mode
+    hvac_mode: heat
   mode: single
 - id: '1705577740904'
   alias: Verwarming uit op werkdag
@@ -624,13 +645,15 @@
   - platform: numeric_state
     entity_id:
     - sensor.kwh_meter_zonnepanelen_active_power
-    below: -250
+    below: -400
   condition:
   - condition: device
     type: is_off
     device_id: 0eaff47347d8e86ce73ea73db675198e
     entity_id: c63e17c8c7ff75b85c3d8a1727276be8
     domain: switch
+  - condition: time
+    after: '12:30:00'
   action:
   - type: turn_on
     device_id: 0eaff47347d8e86ce73ea73db675198e
@@ -643,13 +666,13 @@
       title: Wasmachine gaat aan
   mode: single
 - id: '1706087379533'
-  alias: Vaatwasser aan bij voldoende zon
+  alias: Vaatwasser aan bij voldoende zon in winter
   description: ''
   trigger:
   - platform: numeric_state
     entity_id:
     - sensor.kwh_meter_zonnepanelen_active_power
-    below: -250
+    below: -400
   condition:
   - condition: device
     type: is_off
@@ -684,6 +707,11 @@
     entity_id: climate.thermostaat
     data:
       temperature: 19
+  - device_id: 98c3b36b898511c3fea646621ada9808
+    domain: climate
+    entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
+    type: set_hvac_mode
+    hvac_mode: heat
   mode: single
 - id: '1708361535929'
   alias: Verwarming aan als iemand thuis avond
@@ -699,9 +727,15 @@
     before: '22:00:00'
   action:
   - service: climate.set_temperature
-    entity_id: climate.thermostaat
     data:
-      temperature: 20
+      temperature: 19
+    target:
+      device_id: 98c3b36b898511c3fea646621ada9808
+  - device_id: 98c3b36b898511c3fea646621ada9808
+    domain: climate
+    entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
+    type: set_hvac_mode
+    hvac_mode: heat
   mode: single
 - id: '1708361608666'
   alias: Honeywell Lyric Fix
@@ -719,4 +753,56 @@
   action:
   - service: homeassistant.update_entity
     entity_id: climate.thermostaat
+  mode: single
+- id: '1709449595343'
+  alias: Vaatwasser aan bij voldoende zon vanaf maart
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.kwh_meter_zonnepanelen_active_power
+    below: -1000
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 0bd644fdb9c2b33937b560f64c070356
+    entity_id: 49f29d2ad59ab7a2875866b4b6c158ef
+    domain: switch
+  action:
+  - type: turn_on
+    device_id: 0bd644fdb9c2b33937b560f64c070356
+    entity_id: 49f29d2ad59ab7a2875866b4b6c158ef
+    domain: switch
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    metadata: {}
+    data:
+      message: Vaatwasser gaat aan
+      title: Vaatwasser gaat aan
+  mode: single
+- id: '1709449709736'
+  alias: Wasmachine aan bij voldoende zon vanaf maart
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id:
+    - sensor.kwh_meter_zonnepanelen_active_power
+    below: -1000
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 0eaff47347d8e86ce73ea73db675198e
+    entity_id: c63e17c8c7ff75b85c3d8a1727276be8
+    domain: switch
+  - condition: time
+    after: '12:30:00'
+  action:
+  - type: turn_on
+    device_id: 0eaff47347d8e86ce73ea73db675198e
+    entity_id: c63e17c8c7ff75b85c3d8a1727276be8
+    domain: switch
+  - service: notify.mobile_app_dicks_iphone_14_pm
+    metadata: {}
+    data:
+      message: Wasmachine gaat aan
+      title: Wasmachine gaat aan
   mode: single
