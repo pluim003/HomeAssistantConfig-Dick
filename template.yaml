@@ -1,5 +1,5 @@
 # template.yaml
-# v2024.03.07
+# v2024.05.07
 #
 # History:
 #
@@ -30,6 +30,8 @@
 # v2023.12.24 - Small correction in total solar power since installation (it was off by 1,2kWh,
 #               instead of using 1,051 as multiplier changed it to 1,048)
 # v2024.03.07 - Trying to get a better monitoring of unmonitored electricity
+# v2024.05.07 - Added 'zonnepanelen actuele opbrengst' as minus 'kwh_meter_zonnepanelen_active_power' so that it shows a positive
+#               number instead of a negative number and will use this for automations in the near future
 #
 
 # sensors to layout the energy ussage a bit nicer
@@ -77,8 +79,18 @@
   - sensor:
       - name: 'Totale stroom verbruik plus zon'
         unit_of_measurement : "kWh"
-        state: "{{ (states('sensor.p1_meter_total_power_import_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) - states('sensor.p1_meter_total_power_export_t1') |round(1, default=0)  - states('sensor.p1_meter_total_power_export_t2') | round(1, default=0)) | round(1, default=0) + states('sensor.kwh_meter_zonnepanelen_total_power_export') }} " 
+        state: "{{ (states('sensor.p1_meter_total_power_import_t1') |round(1, default=0)  + states('sensor.p1_meter_total_power_import_t2') | round(1, default=0) - states('sensor.p1_meter_total_power_export_t1') |round(1, default=0)  - states('sensor.p1_meter_total_power_export_t2') | round(1, default=0)) + states('sensor.kwh_meter_zonnepanelen_total_power_export') | round(1, default=0) }} " 
         icon: mdi:flash
+  - sensor: 
+      - name: 'Zonnepanelen actuele opbrengst'
+        unique_id: 202405071650
+        unit_of_measurement : "W"
+        state: "{{ 0 - states('sensor.kwh_meter_zonnepanelen_active_power') | round(1, default=0) }}"
+  - sensor:
+      - name: 'Zonnepanelen Actueel min schatting'
+        unique_id: 202405071711
+        unit_of_measurement : "W"
+        state: "{{ (states('sensor.zonnepanelen_actuele_opbrengst')|round(1, default=0) - states('sensor.zonnepanelen_nu')| round(1, default=0))}}"
   - sensor:
       - name: 'Actueel stroom verbruik'
         unit_of_measurement : "W"
@@ -160,17 +172,19 @@
         state_class: total
 
   - sensor:
-      - name: Niet gemonitorde electriciteit_nog_niet_werkend
+      - name: Niet gemonitorde electriciteit
         state: >
-          {{ (states('sensor.totale_stroom_verbruik_met_zon') | float) -  
-            (states('sensor.gemonitorde_electriciteit') | float) 
+          {{ (states('sensor.totale_stroom_verbruik_plus_zon') | float) -  
+            (states('sensor.gemonitorde_electriciteit') | float) -
+           4328.413 
           }}
         device_class: energy
         unit_of_measurement: kWh
+        state_class: total
 #        state_class: total_increasing
 
   - sensor:
-      - name: Niet gemonitorde electriciteit
+      - name: Niet gemonitorde electriciteit oud
         state: >
           {{  (states('sensor.p1_meter_total_power_import_t1') | float) + 
             (states('sensor.p1_meter_total_power_import_t2') |  float) - 

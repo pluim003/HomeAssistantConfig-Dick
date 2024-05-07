@@ -644,8 +644,8 @@
   trigger:
   - platform: numeric_state
     entity_id:
-    - sensor.kwh_meter_zonnepanelen_active_power
-    below: -400
+    - sensor.zonnepanelen_actuele_opbrengst
+    above: 400
   condition:
   - condition: device
     type: is_off
@@ -671,8 +671,8 @@
   trigger:
   - platform: numeric_state
     entity_id:
-    - sensor.kwh_meter_zonnepanelen_active_power
-    below: -400
+    - sensor.zonnepanelen_actuele_opbrengst
+    above: 400
   condition:
   - condition: device
     type: is_off
@@ -760,8 +760,8 @@
   trigger:
   - platform: numeric_state
     entity_id:
-    - sensor.kwh_meter_zonnepanelen_active_power
-    below: -1000
+    - sensor.zonnepanelen_actuele_opbrengst
+    above: 1000
   condition:
   - condition: device
     type: is_off
@@ -785,8 +785,8 @@
   trigger:
   - platform: numeric_state
     entity_id:
-    - sensor.kwh_meter_zonnepanelen_active_power
-    below: -1000
+    - sensor.zonnepanelen_actuele_opbrengst
+    above: 1000
   condition:
   - condition: device
     type: is_off
