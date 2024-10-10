@@ -1,5 +1,5 @@
 # template.yaml
-# v2024.05.07
+# v2024.07.23
 #
 # History:
 #
@@ -32,6 +32,7 @@
 # v2024.03.07 - Trying to get a better monitoring of unmonitored electricity
 # v2024.05.07 - Added 'zonnepanelen actuele opbrengst' as minus 'kwh_meter_zonnepanelen_active_power' so that it shows a positive
 #               number instead of a negative number and will use this for automations in the near future
+# v2024.07.23 - Corrected watermeter by 10.866 due to some weird issues
 #
 
 # sensors to layout the energy ussage a bit nicer
@@ -127,7 +128,7 @@
       - name: 'Waterverbruik_totaal'
         unit_of_measurement: "m³"
         availability: "{{ states('sensor.watermeter_total_water_usage') | is_number }}"
-        state: "{{ (states('sensor.watermeter_total_water_usage') | float  + 1698.8 - 14.282 - 23.491 ) | round(3) }}"
+        state: "{{ (states('sensor.watermeter_total_water_usage') | float  + 1698.8 - 14.282 - 23.491 - 10.866) | round(3) }}"
         icon: mdi:water
 
 # sensor for new watermeter placed on October 12th, 2022. Subtracted value of usage since installation of 
@@ -137,7 +138,7 @@
       - name: 'Watermeterstand'                                            
         unit_of_measurement: "m³" 
         availability: "{{ states('sensor.watermeter_total_water_usage') | is_number }}"                                           
-        state: "{{ (states('sensor.watermeter_total_water_usage') | float  - 14.282 + 0.049 - 3.82 - 23.491) | round(3) }}"    
+        state: "{{ (states('sensor.watermeter_total_water_usage') | float  - 14.282 + 0.049 - 3.82 - 23.491 -10.866) | round(3) }}"    
         icon: mdi:water                                                                
 
 # sensors to find out last day of month and number of days until start of next month to be used with prijsplafond 

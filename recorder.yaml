@@ -1,5 +1,5 @@
 # recorder.yaml
-# v2023.12.29
+# v2024.06.11
 #
 # History:
 #
@@ -10,6 +10,7 @@
 # v2023.12.22 - Removed some excludes
 # v2023.12.28 - Added include sensor.buienradar_irradiance
 # v2023.12.29 - Removed device_tracker from exclude
+# v2024.06.11 - Purge_keep_days decreaed from 365 to 92
 #
 # This file contains the information to record data
 #
@@ -34,6 +35,6 @@
       - sensor.buienradar_irradiance
 
   auto_purge: true
-  purge_keep_days: 365
+  purge_keep_days: 92
 
 

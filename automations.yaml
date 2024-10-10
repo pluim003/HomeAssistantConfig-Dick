@@ -109,11 +109,11 @@
     entity_id: group.familie
     state: home
   action:
-  - service: climate.set_temperature
-    data:
+  - data:
       temperature: 19
+    action: climate.set_temperature
     target:
-      device_id: 98c3b36b898511c3fea646621ada9808
+      device_id: 5199529773ed38f5268262a0119cccc4
   - device_id: 98c3b36b898511c3fea646621ada9808
     domain: climate
     entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
@@ -138,12 +138,12 @@
     entity_id: group.familie
     state: home
   action:
-  - service: climate.set_temperature
-    data:
+  - data:
       temperature: 18.5
       hvac_mode: heat_cool
+    action: climate.set_temperature
     target:
-      device_id: 98c3b36b898511c3fea646621ada9808
+      device_id: 5199529773ed38f5268262a0119cccc4
   - device_id: 98c3b36b898511c3fea646621ada9808
     domain: climate
     entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
@@ -262,16 +262,15 @@
 - id: '1703160070212'
   alias: Purge database
   description: ''
-  trigger:
-  - platform: time
-    at: 03:03:00
-  condition: []
-  action:
-  - service: recorder.purge_entities
+  triggers:
+  - at: 03:03:00
+    trigger: time
+  actions:
+  - action: recorder.purge
+    metadata: {}
     data:
-      entity_globs: sensor.buienradar* sensor.fritz* button.* light.*
+      repack: true
       keep_days: 14
-  mode: single
 - id: '1703769617583'
   alias: Lamp werkkamer aan bij beweging
   description: ''
@@ -492,11 +491,11 @@
     entity_id: group.familie
     state: home
   action:
-  - service: climate.set_temperature
-    data:
+  - data:
       temperature: 19
+    action: climate.set_temperature
     target:
-      device_id: 98c3b36b898511c3fea646621ada9808
+      device_id: 5199529773ed38f5268262a0119cccc4
   - device_id: 98c3b36b898511c3fea646621ada9808
     domain: climate
     entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
@@ -517,11 +516,11 @@
     entity_id: person.emilie_pluim
     state: home
   action:
-  - service: climate.set_temperature
-    data:
+  - data:
       temperature: 19.5
+    action: climate.set_temperature
     target:
-      device_id: 98c3b36b898511c3fea646621ada9808
+      device_id: 5199529773ed38f5268262a0119cccc4
   - device_id: 98c3b36b898511c3fea646621ada9808
     domain: climate
     entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
@@ -543,12 +542,12 @@
     - wed
     - thu
   action:
-  - service: climate.set_temperature
-    data:
+  - data:
       temperature: 18
       hvac_mode: 'off'
+    action: climate.set_temperature
     target:
-      device_id: 98c3b36b898511c3fea646621ada9808
+      device_id: 5199529773ed38f5268262a0119cccc4
   mode: single
 - id: '1705577779941'
   alias: Verwarming uit in weekend
@@ -562,11 +561,11 @@
     - fri
     - sat
   action:
-  - service: climate.set_temperature
-    data:
+  - data:
       temperature: 18
+    action: climate.set_temperature
     target:
-      device_id: 98c3b36b898511c3fea646621ada9808
+      device_id: 5199529773ed38f5268262a0119cccc4
   mode: single
 - id: '1705577815078'
   alias: Verwarming uit als niemand thuis
@@ -578,11 +577,11 @@
     to: not_home
   condition:
   action:
-  - service: climate.set_temperature
-    data:
+  - data:
       temperature: 18
+    action: climate.set_temperature
     target:
-      device_id: 98c3b36b898511c3fea646621ada9808
+      device_id: 5199529773ed38f5268262a0119cccc4
   mode: single
 - id: '1705596084966'
   alias: Kerstverlichting overkapping aan
@@ -618,7 +617,12 @@
   - platform: sun
     event: sunrise
     offset: -00:30:00
-  condition: []
+  condition:
+  - condition: device
+    type: is_on
+    device_id: fbb19895d1ebfff19f07588ec33954bd
+    entity_id: f45ff998b0b533443c4d8efab8153f50
+    domain: switch
   action:
   - service: switch.turn_off
     data: {}
@@ -703,15 +707,11 @@
     after: 08:30:00
     before: '18:00:00'
   action:
-  - service: climate.set_temperature
-    entity_id: climate.thermostaat
-    data:
+  - data:
       temperature: 19
-  - device_id: 98c3b36b898511c3fea646621ada9808
-    domain: climate
-    entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
-    type: set_hvac_mode
-    hvac_mode: heat
+    action: climate.set_temperature
+    target:
+      device_id: 5199529773ed38f5268262a0119cccc4
   mode: single
 - id: '1708361535929'
   alias: Verwarming aan als iemand thuis avond
@@ -726,11 +726,11 @@
     after: '18:00:00'
     before: '22:00:00'
   action:
-  - service: climate.set_temperature
-    data:
+  - data:
       temperature: 19
+    action: climate.set_temperature
     target:
-      device_id: 98c3b36b898511c3fea646621ada9808
+      device_id: 5199529773ed38f5268262a0119cccc4
   - device_id: 98c3b36b898511c3fea646621ada9808
     domain: climate
     entity_id: 2a8a5adb988a6ba3dfa4ed7fe15e4899
@@ -805,4 +805,30 @@
     data:
       message: Wasmachine gaat aan
       title: Wasmachine gaat aan
+  mode: single
+- id: '1723121423052'
+  alias: Vriezer uit
+  description: Schakel vriezer uit als test
+  trigger:
+  - platform: time
+    at: 04:00:00
+  condition: []
+  action:
+  - type: turn_off
+    device_id: 32e3724461af61ea5ac1b0d6459ccfb1
+    entity_id: 0e9e0d0b23003742a12a61cf3d59045f
+    domain: switch
+  mode: single
+- id: '1723121499804'
+  alias: Vriezer aanzetten
+  description: Vriezer aanzetten als test
+  trigger:
+  - platform: time
+    at: 06:00:00
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 32e3724461af61ea5ac1b0d6459ccfb1
+    entity_id: 0e9e0d0b23003742a12a61cf3d59045f
+    domain: switch
   mode: single
