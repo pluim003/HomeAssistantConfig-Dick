@@ -1,5 +1,5 @@
 # sensor.yaml
-# v2023.06.16
+# v2025.01.04
 #
 # History:
 #
@@ -16,6 +16,7 @@
 # v2023.01.09 - Added sensor for prijsplafond
 # v2023.06.16 - Moved rpi4_cpu_temperature to command_line.yaml
 # v2023.12.20 - Removed sensor for prijsplafond
+# v2025.01.04 - Removed sensor for afvalwijzer
 #
 
   - platform: systemmonitor
@@ -23,16 +24,6 @@
       - type: disk_use_percent
         arg: /config
       - type: memory_free
-
-  - platform: afvalwijzer
-    provider: mijnafvalwijzer
-    postal_code: !secret adres_postcode
-    street_number: !secret adres_huisnummer
-    suffix: !secret adres_toevoeging
-    exclude_pickup_today: false
-    default_label: Geen
-    id: ''
-    exclude_list: ' ' 
 
   - platform: template
     sensors:

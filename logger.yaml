@@ -50,6 +50,6 @@
 
   #  homeassistant.components.influxdb: debug 
 
-  #  custom_components.afvalwijzer: debug
+    custom_components.afvalwijzer: debug
   #  custom_components.iphonedetect: debug
   #  homeassistant.components.mqtt: debug

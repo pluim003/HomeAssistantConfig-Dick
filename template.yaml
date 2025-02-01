@@ -1,5 +1,5 @@
 # template.yaml
-# v2024.07.23
+# v2025.02.01
 #
 # History:
 #
@@ -33,6 +33,13 @@
 # v2024.05.07 - Added 'zonnepanelen actuele opbrengst' as minus 'kwh_meter_zonnepanelen_active_power' so that it shows a positive
 #               number instead of a negative number and will use this for automations in the near future
 # v2024.07.23 - Corrected watermeter by 10.866 due to some weird issues
+# v2024.10.11 - Corrected total for solar panels bij 3.5
+# v2024.10.30 - Corrected watermeter by 5.056 and combined some previous values
+# v2024.12.27 - Corrected watermet by -1.565
+# v2025.01.13 - Added sensors for electricity-usage without battery
+# v2025.01.23 - Modified sensors with respect to actual electricity usage due to change of PV-system
+# v2025.01.24 - After changing the inverter some calculations weren't correct
+# v2025.02.01 - Modified 'zonnepanelen actuele opbrengst' to use the new inverter. Reason is so that I don't have to modify automations
 #
 
 # sensors to layout the energy ussage a bit nicer
@@ -86,27 +93,50 @@
       - name: 'Zonnepanelen actuele opbrengst'
         unique_id: 202405071650
         unit_of_measurement : "W"
-        state: "{{ 0 - states('sensor.kwh_meter_zonnepanelen_active_power') | round(1, default=0) }}"
+        state: "{{ states('sensor.goodwe_pv1_power') | round(1, default=0) }}"
   - sensor:
       - name: 'Zonnepanelen Actueel min schatting'
         unique_id: 202405071711
         unit_of_measurement : "W"
-        state: "{{ (states('sensor.zonnepanelen_actuele_opbrengst')|round(1, default=0) - states('sensor.zonnepanelen_nu')| round(1, default=0))}}"
+        state: "{{ (states('sensor.goodwe_pv1_power')|round(1, default=0) - states('sensor.zonnepanelen_nu')| round(1, default=0))}}"
   - sensor:
       - name: 'Actueel stroom verbruik'
+        unique_id: 202501231541
         unit_of_measurement : "W"
 #        state: "{{ max( 0, (states('sensor.p1_meter_active_power') | float(default=0)  - states('sensor.kwh_meter_zonnepanelen_active_power') | float(default=0))) }}"
-        state: "{{ (states('sensor.p1_meter_active_power') | float(default=0)  - states('sensor.kwh_meter_zonnepanelen_active_power') | float(default=0)) }}"
+        state: "{{ (states('sensor.p1_meter_active_power') | float(default=0)  + states('sensor.goodwe_pv1_power') | float(default=0)) }}"
         icon: mdi:flash
+  - sensor:                                                                                    
+      - name: 'Actueel stroom verbruik zonder batterij'
+        unique_id: 202501131303
+        unit_of_measurement : "W"
+        state: "{{ (states('sensor.p1_meter_active_power') | float(default=0) + states('sensor.goodwe_pv1_power') | float(default=0) - states('sensor.hw_energysocket_marstek_vermogen') | float(default=0)) }}"
+        icon: mdi:flash                                                                        
+
+  - sensor: 
+      - name: 'Batterij in'
+        unique_id: 202501131315
+        unit_of_measurement : "W"
+        state: "{{ max( 0, (states('sensor.hw_energysocket_marstek_vermogen')) | float(default=0)) }}"
+        icon: mdi:flash
+  - sensor:
+      - name: 'Batterij uit'
+        unique_id: 202501131318
+        unit_of_measurement : "W"
+        state: "{{ max( 0, 0 - (states('sensor.hw_energysocket_marstek_vermogen')) | float(default=0)) }}"
+        icon: mdi:flash                                                                                                                                                          
+
 
 # sensor to add my total production of the solarpanels before buying
 # a kwh-meter
 
   - sensor:
       - name: 'Zonnepanelen opbrengst sinds aanschaf'
+        unique_id: 202501231604
         unit_of_measurement : "kWh"
-        availability: "{{ states('sensor.kwh_meter_zonnepanelen_total_power_export') | is_number }}"
-        state: "{{ (1.0048*states('sensor.kwh_meter_zonnepanelen_total_power_export') | float  + 21782.55) | round(1) }}"
+#        availability: "{{ states('sensor.kwh_meter_zonnepanelen_total_power_export') | is_number }}"
+# state: "{{ (1.0048*states('sensor.kwh_meter_zonnepanelen_total_power_export') | float  + 21782.55 + 3.5) | round(1) }}"
+        state: "{{ (states('sensor.goodwe_totale_opbrengst_zonnepanelen') | float  + 28115.4) | round(1) }}"      
         icon: mdi:solar-power
 
 # sensors for sunrise and sunset
@@ -128,7 +158,7 @@
       - name: 'Waterverbruik_totaal'
         unit_of_measurement: "m³"
         availability: "{{ states('sensor.watermeter_total_water_usage') | is_number }}"
-        state: "{{ (states('sensor.watermeter_total_water_usage') | float  + 1698.8 - 14.282 - 23.491 - 10.866) | round(3) }}"
+        state: "{{ (states('sensor.watermeter_total_water_usage') | float  + 1698.8 - 48.639 -5.056 -1.565) | round(3) }}"
         icon: mdi:water
 
 # sensor for new watermeter placed on October 12th, 2022. Subtracted value of usage since installation of 
@@ -138,7 +168,7 @@
       - name: 'Watermeterstand'                                            
         unit_of_measurement: "m³" 
         availability: "{{ states('sensor.watermeter_total_water_usage') | is_number }}"                                           
-        state: "{{ (states('sensor.watermeter_total_water_usage') | float  - 14.282 + 0.049 - 3.82 - 23.491 -10.866) | round(3) }}"    
+        state: "{{ (states('sensor.watermeter_total_water_usage') | float  - 52.41 - 5.056 -1.565) | round(3) }}"    
         icon: mdi:water                                                                
 
 # sensors to find out last day of month and number of days until start of next month to be used with prijsplafond 

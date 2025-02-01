@@ -2,42 +2,42 @@
 # Example configuration.yaml entry
   sensor:
     - name: "Slaapkamer Dick temperatuur"
-      state_topic: rtl_433/bresser/55/temperature_C
+      state_topic: rtl_433/bresser/Nexus-TH/1/temperature_C
       unique_id: slaapkamer_dick_temperatuur
       unit_of_measurement: "°C"
       value_template: "{{ value | float }}"
       device_class: temperature
 
     - name: "Slaapkamer Dick luchtvochtigheid"
-      state_topic: rtl_433/bresser/55/humidity
+      state_topic: rtl_433/bresser/Nexus-TH/1/humidity
       unique_id: slaapkamer_dick_luchtvochtigheid
       unit_of_measurement: "%"
       value_template: "{{ value | int }}"
       device_class: humidity
 
     - name: "Tuin temperatuur"
-      state_topic: rtl_433/bresser/254/temperature_C
+      state_topic: rtl_433/bresser/Nexus-TH/2/temperature_C
       unique_id: tuin_temperatuur
       unit_of_measurement: "°C"
       value_template: "{{ value | float }}"
       device_class: temperature
 
     - name: "Tuin luchtvochtigheid"
-      state_topic: rtl_433/bresser/254/humidity
+      state_topic: rtl_433/bresser/Nexus-TH/2/humidity
       unique_id: tuin_luchtvochtigheid
       unit_of_measurement: "%"
       value_template: "{{ value | int }}"
       device_class: humidity
    
     - name: "Werkkamer temperatuur"
-      state_topic: rtl_433/bresser/3/temperature_C
+      state_topic: rtl_433/bresser/Nexus-TH/3/temperature_C
       unique_id: werkkamer_temperatuur
       unit_of_measurement: "°C"
       value_template: "{{ value | float }}" 
       device_class: temperature
 
     - name: "Werkkamer luchtvochtigheid" 
-      state_topic: rtl_433/bresser/3/humidity
+      state_topic: rtl_433/bresser/Nexus-TH/3/humidity
       unique_id: werkkamer_luchtvochtigheid
       unit_of_measurement: "%" 
       value_template: "{{ value | int }}"
@@ -52,3 +52,91 @@
       value_template: "{{ value | float }}"
       device_class: battery
 
+# Marstek-batterij
+
+    - name: "Total Cumulative Charging Capacity"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.tot_i }}"
+      unit_of_measurement: "kWh"
+
+    - name: "Total Cumulative Discharge Capacity"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.tot_o }}"
+      unit_of_measurement: "kWh"
+
+    - name: "Daily Cumulative Charging Capacity"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.ele_d }}"
+      unit_of_measurement: "kWh"
+
+    - name: "Monthly Cumulative Charging Capacity"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.ele_m }}"
+      unit_of_measurement: "kWh"
+
+    - name: "Daily Cumulative Discharge Capacity"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.grd_d }}"
+      unit_of_measurement: "kWh"
+
+    - name: "Monthly Cumulative Discharge Capacity"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.grd_m }}"
+      unit_of_measurement: "kWh"
+
+    - name: "Daily Cumulative Income"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.inc_d }}"
+      unit_of_measurement: "EUR"
+
+    - name: "Monthly Cumulative Income"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.inc_m }}"
+      unit_of_measurement: "EUR"
+
+    - name: "Off Grid Power"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.grd_f }}"
+      unit_of_measurement: "VA"
+
+    - name: "Combined Power"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.grd_o }}"
+      unit_of_measurement: "W"
+
+    - name: "Working Status"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.grd_t }}"
+
+    - name: "CT Status"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.gct_s }}"
+
+    - name: "Battery Working Status"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.cel_s }}"
+
+    - name: "Battery Energy"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.cel_p }}"
+      unit_of_measurement: "kWh"
+
+    - name: "SOC Error Code (Fault)"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.err_t }}"
+
+    - name: "SOC Error Code (Warning)"
+      state_topic: "hame_energy/{type}/App/{uid or mac}/ctrl"
+      value_template: "{{ value_json.err_a }}"
+
+    - name: "Device Version Number"
+      state_topic: "hame_energy/{{ type }}/App/{{ uid_or_mac }}/ctrl"
+      value_template: "{{ value_json.dev_n }}"
+
+    - name: "Grid Type"
+      state_topic: "hame_energy/{{ type }}/App/{{ uid_or_mac }}/ctrl"
+      value_template: "{{ value_json.grd_y }}"
+
+    - name: "Working Mode"
+      state_topic: "hame_energy/{{ type }}/App/{{ uid_or_mac }}/ctrl"
+      value_template: "{{ value_json.wor_m }}"

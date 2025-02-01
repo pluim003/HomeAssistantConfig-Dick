@@ -123,10 +123,10 @@
 - id: '1702717190088'
   alias: Verwarming aan op werkdag
   description: ''
-  trigger:
-  - platform: time
-    at: 07:30
-  condition:
+  triggers:
+  - at: 07:30
+    trigger: time
+  conditions:
   - condition: time
     weekday:
     - mon
@@ -137,9 +137,9 @@
   - condition: state
     entity_id: group.familie
     state: home
-  action:
+  actions:
   - data:
-      temperature: 18.5
+      temperature: 18
       hvac_mode: heat_cool
     action: climate.set_temperature
     target:
@@ -209,26 +209,25 @@
 - id: '1702717937329'
   alias: Afval meldingen
   description: ''
-  trigger:
-  - platform: time
-    at:
+  triggers:
+  - at:
     - 07:45:00
     id: Vandaag_today
-  - platform: time
-    at:
+    trigger: time
+  - at:
     - '17:00:00'
     id: Morgen_tomorrow
-  - platform: time
-    at:
+    trigger: time
+  - at:
     - '20:00:00'
     id: Morgen_tomorrow
-  condition:
+    trigger: time
+  conditions:
   - alias: Notification needed?
     condition: template
-    value_template: '{{ states(sensor) != ''Geen'' }}'
-  action:
+    value_template: '{{ states(''sensor.afvalwijzer_tomorrow'') != ''geen'' }}'
+  actions:
   - alias: Notification phones
-    service: notify.mobile_app_dicks_iphone_14_pm
     data:
       title: Denk aan de {{ states(sensor) }} container
       message: '{{ trigger.id.split(''_'')[0] }} moet {{ states(sensor) }} naar buiten'
@@ -240,6 +239,7 @@
         - action: MARK_TRASH_MOVED
           title: Afval verwerkt
           icon: sfsymbols:trash.circle
+    action: notify.mobile_app_dicks_iphone_14_pm
   mode: single
   max_exceeded: silent
   variables:
@@ -483,16 +483,16 @@
 - id: '1705216542367'
   alias: Verwarming aan in de avond
   description: ''
-  trigger:
-  - platform: time
-    at: '18:00'
-  condition:
+  triggers:
+  - at: '18:00'
+    trigger: time
+  conditions:
   - condition: state
     entity_id: group.familie
     state: home
-  action:
+  actions:
   - data:
-      temperature: 19
+      temperature: 18
     action: climate.set_temperature
     target:
       device_id: 5199529773ed38f5268262a0119cccc4
@@ -505,19 +505,20 @@
 - id: '1705216795669'
   alias: Verwarming aan in de avond als Emilie thuis is
   description: ''
-  trigger:
-  - platform: time
-    at: '18:00'
-  condition:
+  triggers:
+  - at: '18:00'
+    trigger: time
+  conditions:
   - condition: state
     entity_id: group.familie
     state: home
   - condition: state
     entity_id: person.emilie_pluim
     state: home
-  action:
+  actions:
   - data:
-      temperature: 19.5
+      temperature: 18.5
+      hvac_mode: auto
     action: climate.set_temperature
     target:
       device_id: 5199529773ed38f5268262a0119cccc4
@@ -530,10 +531,10 @@
 - id: '1705577740904'
   alias: Verwarming uit op werkdag
   description: ''
-  trigger:
-  - platform: time
-    at: '22:00'
-  condition:
+  triggers:
+  - at: '22:00'
+    trigger: time
+  conditions:
   - condition: time
     weekday:
     - sun
@@ -541,10 +542,10 @@
     - tue
     - wed
     - thu
-  action:
+  actions:
   - data:
-      temperature: 18
       hvac_mode: 'off'
+      temperature: 17
     action: climate.set_temperature
     target:
       device_id: 5199529773ed38f5268262a0119cccc4
@@ -552,17 +553,17 @@
 - id: '1705577779941'
   alias: Verwarming uit in weekend
   description: ''
-  trigger:
-  - platform: time
-    at: '22:30'
-  condition:
+  triggers:
+  - at: '22:30'
+    trigger: time
+  conditions:
   - condition: time
     weekday:
     - fri
     - sat
-  action:
+  actions:
   - data:
-      temperature: 18
+      temperature: 17
     action: climate.set_temperature
     target:
       device_id: 5199529773ed38f5268262a0119cccc4
@@ -570,15 +571,16 @@
 - id: '1705577815078'
   alias: Verwarming uit als niemand thuis
   description: ''
-  trigger:
-  - platform: state
-    entity_id: group.familie
+  triggers:
+  - entity_id: group.familie
     from: home
     to: not_home
-  condition:
-  action:
+    trigger: state
+  conditions:
+  actions:
   - data:
-      temperature: 18
+      temperature: 17
+      hvac_mode: 'off'
     action: climate.set_temperature
     target:
       device_id: 5199529773ed38f5268262a0119cccc4
@@ -672,43 +674,43 @@
 - id: '1706087379533'
   alias: Vaatwasser aan bij voldoende zon in winter
   description: ''
-  trigger:
-  - platform: numeric_state
-    entity_id:
+  triggers:
+  - entity_id:
     - sensor.zonnepanelen_actuele_opbrengst
+    trigger: numeric_state
     above: 400
-  condition:
+  conditions:
   - condition: device
     type: is_off
     device_id: 0bd644fdb9c2b33937b560f64c070356
     entity_id: 49f29d2ad59ab7a2875866b4b6c158ef
     domain: switch
-  action:
+  actions:
   - type: turn_on
     device_id: 0bd644fdb9c2b33937b560f64c070356
     entity_id: 49f29d2ad59ab7a2875866b4b6c158ef
     domain: switch
-  - service: notify.mobile_app_dicks_iphone_14_pm
-    metadata: {}
+  - metadata: {}
     data:
       message: Vaatwasser gaat aan
       title: Vaatwasser gaat aan
+    action: notify.mobile_app_dicks_iphone_14_pm
   mode: single
 - id: '1708361476640'
   alias: Verwarming aan als iemand thuis overdag
   description: ''
-  trigger:
-  - platform: state
-    entity_id: group.familie
+  triggers:
+  - entity_id: group.familie
     from: not_home
     to: home
-  condition:
+    trigger: state
+  conditions:
   - condition: time
     after: 08:30:00
     before: '18:00:00'
-  action:
+  actions:
   - data:
-      temperature: 19
+      temperature: 17.5
     action: climate.set_temperature
     target:
       device_id: 5199529773ed38f5268262a0119cccc4
@@ -831,4 +833,67 @@
     device_id: 32e3724461af61ea5ac1b0d6459ccfb1
     entity_id: 0e9e0d0b23003742a12a61cf3d59045f
     domain: switch
+  mode: single
+- id: '1732713065860'
+  alias: Wasmachine aan bij weinig zon
+  description: ''
+  triggers:
+  - trigger: time
+    at: '12:00:00'
+  conditions:
+  - condition: device
+    type: is_off
+    device_id: 0eaff47347d8e86ce73ea73db675198e
+    entity_id: c63e17c8c7ff75b85c3d8a1727276be8
+    domain: switch
+  actions:
+  - type: turn_on
+    device_id: 0eaff47347d8e86ce73ea73db675198e
+    entity_id: c63e17c8c7ff75b85c3d8a1727276be8
+    domain: switch
+  - metadata: {}
+    data:
+      message: Wasmachine gaat aan
+      title: Wasmachine gaat aan
+    action: notify.mobile_app_dicks_iphone_14_pm
+  mode: single
+- id: '1732717322946'
+  alias: Vaatwasser aan bij weinig zon
+  description: ''
+  triggers:
+  - trigger: time
+    at: '15:00:00'
+  conditions:
+  - condition: device
+    type: is_off
+    device_id: 0bd644fdb9c2b33937b560f64c070356
+    entity_id: 49f29d2ad59ab7a2875866b4b6c158ef
+    domain: switch
+  actions:
+  - type: turn_on
+    device_id: 0bd644fdb9c2b33937b560f64c070356
+    entity_id: 49f29d2ad59ab7a2875866b4b6c158ef
+    domain: switch
+  - metadata: {}
+    data:
+      message: Wasmachine gaat aan
+      title: Wasmachine gaat aan
+    action: notify.mobile_app_dicks_iphone_14_pm
+  mode: single
+- id: '1736497538842'
+  alias: Bijna teruglevering
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.p1_meter_active_power
+    below: '30'
+  conditions: []
+  actions:
+  - action: notify.notify
+    metadata: {}
+    data:
+      message: energie bijna onder 0
+      title: energie bijna onder 0
+      target: mobile_app_dicks_iphone_14_pm
   mode: single

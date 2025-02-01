@@ -35,6 +35,6 @@
       - sensor.buienradar_irradiance
 
   auto_purge: true
-  purge_keep_days: 92
+  purge_keep_days: 185
 
 
