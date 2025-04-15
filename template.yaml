@@ -1,5 +1,5 @@
 # template.yaml
-# v2025.02.01
+# v2025.02.07
 #
 # History:
 #
@@ -40,6 +40,7 @@
 # v2025.01.23 - Modified sensors with respect to actual electricity usage due to change of PV-system
 # v2025.01.24 - After changing the inverter some calculations weren't correct
 # v2025.02.01 - Modified 'zonnepanelen actuele opbrengst' to use the new inverter. Reason is so that I don't have to modify automations
+# v2025.02.07 - 'zonnepanelen actuele opbrengst' shows an integer and not a decimal, just like 'Goodwe_pv1_power' does and rounded others
 #
 
 # sensors to layout the energy ussage a bit nicer
@@ -93,7 +94,7 @@
       - name: 'Zonnepanelen actuele opbrengst'
         unique_id: 202405071650
         unit_of_measurement : "W"
-        state: "{{ states('sensor.goodwe_pv1_power') | round(1, default=0) }}"
+        state: "{{ states('sensor.goodwe_pv1_power') | round(0, default=0) }}"
   - sensor:
       - name: 'Zonnepanelen Actueel min schatting'
         unique_id: 202405071711
@@ -103,14 +104,14 @@
       - name: 'Actueel stroom verbruik'
         unique_id: 202501231541
         unit_of_measurement : "W"
-#        state: "{{ max( 0, (states('sensor.p1_meter_active_power') | float(default=0)  - states('sensor.kwh_meter_zonnepanelen_active_power') | float(default=0))) }}"
-        state: "{{ (states('sensor.p1_meter_active_power') | float(default=0)  + states('sensor.goodwe_pv1_power') | float(default=0)) }}"
+#        state: "{{ max( 0, (states('sensor.p1_meter_active_power') | round(0,default=0)  - states('sensor.kwh_meter_zonnepanelen_active_power') | round(0, default=0))) }}"
+        state: "{{ (states('sensor.p1_meter_active_power') | round(0, default=0)  + states('sensor.goodwe_pv1_power') | round(0, default=0)) }}"
         icon: mdi:flash
   - sensor:                                                                                    
       - name: 'Actueel stroom verbruik zonder batterij'
         unique_id: 202501131303
         unit_of_measurement : "W"
-        state: "{{ (states('sensor.p1_meter_active_power') | float(default=0) + states('sensor.goodwe_pv1_power') | float(default=0) - states('sensor.hw_energysocket_marstek_vermogen') | float(default=0)) }}"
+        state: "{{ (states('sensor.p1_meter_active_power') | round(0, default=0) + states('sensor.goodwe_pv1_power') | round(0, default=0) - states('sensor.hw_energysocket_marstek_vermogen') | round(0, default=0)) }}"
         icon: mdi:flash                                                                        
 
   - sensor: 
